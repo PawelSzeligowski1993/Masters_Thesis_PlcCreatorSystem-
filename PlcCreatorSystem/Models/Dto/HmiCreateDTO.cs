@@ -1,0 +1,20 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PlcCreatorSystem_API.Models.Dto
+{
+    public class HmiCreateDTO
+    {
+        [Required]
+        [MaxLength(30)]
+        public string Name { get; set; }
+        [Required]
+        [MaxLength(15)]
+        public string IP { get; set; }
+        [Required]
+        [MaxLength(30)]
+        public string Identyfier { get; set; }
+        [MaxLength(300)]
+        public string Details { get; set; }
+        //public Author Author { get; set; }
+    }
+}
