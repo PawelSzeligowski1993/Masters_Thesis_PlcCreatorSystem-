@@ -12,7 +12,6 @@ namespace PlcCreatorSystem_API.Repository
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            //_db.VillaNumbers.Include(u => u.VillaID).ToList();
             this._dbSet = _db.Set<T>();
         }
         public async Task CreateAsync(T entity)
@@ -22,7 +21,7 @@ namespace PlcCreatorSystem_API.Repository
         }
 
 
-        //"Villa, VillaSpecial"
+        //"PLC = includeProperties, HMI =includeProperties "
         public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null)
         {
             IQueryable<T> query = _dbSet;
@@ -62,7 +61,7 @@ namespace PlcCreatorSystem_API.Repository
             return await query.ToListAsync();
         }
 
-        public async Task RemoveAsync(T entity)
+        public async Task RemoveAsync(T entity) 
         {
             _dbSet.Remove(entity);
             await SaveAsync();

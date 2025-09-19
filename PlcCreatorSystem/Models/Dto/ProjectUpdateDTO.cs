@@ -11,9 +11,9 @@ namespace PlcCreatorSystem_API.Models.Dto
         [MaxLength(30)]
         public string Name { get; set; }
         [Required]
-        public PLC PLC { get; set; }
+        public int PlcID { get; set; }
         [Required]
-        public HMI HMI { get; set; }
+        public int HmiID { get; set; }
         [Required]
         public string CustomerDetails { get; set; }
         [Required]
