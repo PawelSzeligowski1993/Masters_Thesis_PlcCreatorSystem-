@@ -1,8 +1,7 @@
-﻿using static PlcCreatorSystem_Utility.SD;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static PlcCreatorSystem_Utility.SD;
 
-namespace PlcCreatorSystem_API.Models.Dto
+namespace PlcCreatorSystem_WEB.Models.Dto
 {
     public class ProjectDTO
     {

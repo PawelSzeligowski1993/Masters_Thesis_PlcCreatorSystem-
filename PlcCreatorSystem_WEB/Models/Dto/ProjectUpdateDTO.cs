@@ -1,11 +1,11 @@
 ﻿using static PlcCreatorSystem_Utility.SD;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace PlcCreatorSystem_API.Models.Dto
+namespace PlcCreatorSystem_WEB.Models.Dto
 {
-    public class ProjectDTO
+    public class ProjectUpdateDTO
     {
+        [Required]
         public int Id { get; set; }
         [Required]
         [MaxLength(30)]
@@ -13,11 +13,7 @@ namespace PlcCreatorSystem_API.Models.Dto
         [Required]
         public int PlcID { get; set; }
         [Required]
-        public PlcDTO PLC { get; set; }
-        [Required]
         public int HmiID { get; set; }
-        [Required]
-        public HmiDTO HMI { get; set; }
         [Required]
         public string CustomerDetails { get; set; }
         [Required]

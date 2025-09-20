@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PlcCreatorSystem_API.Models.Enums;
+using static PlcCreatorSystem_Utility.SD;
 
 namespace PlcCreatorSystem_API.Models
 {

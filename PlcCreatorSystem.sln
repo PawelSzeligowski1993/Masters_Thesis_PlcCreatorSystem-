@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlcCreatorSystem_API", "PlcCreatorSystem\PlcCreatorSystem_API.csproj", "{8A34B408-596C-4B2A-AFE5-3EC51DEF36FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlcCreatorSystem_API", "PlcCreatorSystem\PlcCreatorSystem_API.csproj", "{8A34B408-596C-4B2A-AFE5-3EC51DEF36FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlcCreatorSystem_WEB", "PlcCreatorSystem_WEB\PlcCreatorSystem_WEB.csproj", "{7583FB45-D580-4AC8-8665-915A860725C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlcCreatorSystem_Utility", "PlcCreatorSystem_Utility\PlcCreatorSystem_Utility.csproj", "{731D8828-BFE8-4101-A8EC-108F81D2E076}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{8A34B408-596C-4B2A-AFE5-3EC51DEF36FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A34B408-596C-4B2A-AFE5-3EC51DEF36FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A34B408-596C-4B2A-AFE5-3EC51DEF36FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7583FB45-D580-4AC8-8665-915A860725C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7583FB45-D580-4AC8-8665-915A860725C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7583FB45-D580-4AC8-8665-915A860725C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7583FB45-D580-4AC8-8665-915A860725C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{731D8828-BFE8-4101-A8EC-108F81D2E076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{731D8828-BFE8-4101-A8EC-108F81D2E076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{731D8828-BFE8-4101-A8EC-108F81D2E076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{731D8828-BFE8-4101-A8EC-108F81D2E076}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

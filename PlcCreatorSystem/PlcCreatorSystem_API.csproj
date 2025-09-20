@@ -20,4 +20,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PlcCreatorSystem_Utility\PlcCreatorSystem_Utility.csproj" />
+  </ItemGroup>
+
 </Project>

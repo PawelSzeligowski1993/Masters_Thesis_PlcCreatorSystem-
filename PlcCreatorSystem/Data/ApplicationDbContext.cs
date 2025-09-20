@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlcCreatorSystem_API.Models;
+using PlcCreatorSystem_Utility;
+using static PlcCreatorSystem_Utility.SD;
 
 namespace PlcCreatorSystem_API.Data
 {
@@ -114,7 +116,7 @@ namespace PlcCreatorSystem_API.Data
                     //    CreatedDate = DateTime.Now,
                     //},
                     CustomerDetails = "Firma Krzak",
-                    Status = Models.Enums.ProjectStatus.waiting_to_check,
+                    Status = SD.ProjectStatus.waiting_to_check,
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                 });

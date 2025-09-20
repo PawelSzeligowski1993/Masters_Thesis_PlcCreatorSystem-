@@ -1,4 +1,4 @@
-﻿using PlcCreatorSystem_API.Models.Enums;
+﻿using static PlcCreatorSystem_Utility.SD;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlcCreatorSystem_API.Models.Dto
