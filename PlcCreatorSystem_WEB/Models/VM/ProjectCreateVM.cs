@@ -12,8 +12,8 @@ namespace PlcCreatorSystem_WEB.Models.VM
         }
         public ProjectCreateDTO project { get; set; }
         [ValidateNever]
-        public IEnumerable<SelectListItem> PLCList { get; set; }
+        public IEnumerable<SelectListItem> plcList { get; set; } = Enumerable.Empty<SelectListItem>();
         [ValidateNever]
-        public IEnumerable<SelectListItem> HMIList { get; set; }
+        public IEnumerable<SelectListItem> hmiList { get; set; } = Enumerable.Empty<SelectListItem>();
     }
 }
