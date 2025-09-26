@@ -5,11 +5,11 @@ using PlcCreatorSystem_WEB.Services.IServices;
 
 namespace PlcCreatorSystem_WEB.Services
 {
-    public class PLCService : BaseService, IPlcService
+    public class PlcService : BaseService, IPlcService
     {
         private readonly IHttpClientFactory _clientFactory;
         private string plctUrl;
-        public PLCService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory)
+        public PlcService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory)
         {
             _clientFactory = clientFactory;
             plctUrl = configuration.GetValue<string>("ServiceUrls:Creator_API");

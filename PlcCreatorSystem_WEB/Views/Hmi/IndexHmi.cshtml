@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.HmiDTO>
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">HMI List</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <h1 class="btn btn-outline-primary"><i class=" bi bi-plus-square-fill"></i>"></i>Create New HMI</h1>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    IP
+                </th>
+                <th>
+                    Identyfier
+                </th>
+                <th>
+                    Details
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.IP</td>
+                    <td>@item.Identyfier</td>
+                    <td>@item.Details</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

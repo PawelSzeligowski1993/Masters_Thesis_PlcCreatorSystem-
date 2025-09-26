@@ -1,7 +1,22 @@
+using PlcCreatorSystem_WEB;
+using PlcCreatorSystem_WEB.Services;
+using PlcCreatorSystem_WEB.Services.IServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddHttpClient<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
+builder.Services.AddHttpClient<IPlcService, PlcService>();
+builder.Services.AddScoped<IPlcService, PlcService>();
+
+builder.Services.AddHttpClient<IHmiService, HmiService>();
+builder.Services.AddScoped<IHmiService, HmiService>();
+
 
 var app = builder.Build();
 
