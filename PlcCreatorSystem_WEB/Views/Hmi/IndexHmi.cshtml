@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.HmiDTO>
+
 <br />
 <div class="container p-4 border">
     <div class="row pb-2">
         <div class="col">
-            <h1 class="text-primary">HMI List</h1>
+            <h1 class="text-primary">Villa List</h1>
         </div>
         <div class="col text-end pt-1">
-            <h1 class="btn btn-outline-primary"><i class=" bi bi-plus-square-fill"></i>"></i>Create New HMI</h1>
+            <a asp-controller="HMI" asp-action="CreateHmi" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New HMI</a>
         </div>
     </div>
 
@@ -25,6 +26,7 @@
                 <th>
                     Details
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +37,11 @@
                     <td>@item.IP</td>
                     <td>@item.Identyfier</td>
                     <td>@item.Details</td>
+                    <td>
+                        <a asp-controller="HMI" asp-action="UpdateHmi" asp-route-villaId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="HMI" asp-action="DeleteHmi" asp-route-villaId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+
+                    </td>
                 </tr>
             }
         </tbody>

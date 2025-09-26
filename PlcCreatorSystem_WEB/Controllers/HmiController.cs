@@ -95,7 +95,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteVilla(HmiDTO model)
+        public async Task<IActionResult> DeleteHmi(HmiDTO model)
         {
             var response = await _hmiService.DeleteAsync<APIResponse>(model.Id);
             if (response != null && response.IsSuccess)

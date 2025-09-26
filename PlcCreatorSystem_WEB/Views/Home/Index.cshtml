@@ -8,21 +8,49 @@
     @foreach (var project in Model)
     {
         <div class="p-4 col-md-12 col-lg-6">
-            <div class="row" style="border-radius:20px; border: 1px solid #ffffff">
+            <div class="row" style="border-radius:20px; border: 1px solid #ffffff;
+                                    background-image:url('images/home/project.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;";>
                 <div class="col-8">
                     <p class="card-title text-warning" style="font-size:xx-large">@project.Name</p>
-                    <p class="card-text">
-                        @((MarkupString)project.CustomerDetails)
+                    <p style="font-size:20px; font-weight:bold;background-color:#ff4500;color:white;padding:5px 10px;border-radius:8px;display:inline-block;">
+                        Project Status: @project.Status
                     </p>
                 </div>
                 <div class="col-12">
-                    <div class="row pb-3 pt-2">
-                        <div class="col-4">
-                            <a href="" class="btn btn-success fromform-control btn-block">Book</a>
+                    <div class="row pb-3 pt-2 align-items-start">
+                        <!-- LEFT: Edit + Customer -->
+                        <div class="col-12 col-md-4">
+                            <a href="" class="btn btn-success form-control mb-3">Edit</a>
+                            <div style="background-color:#0ffaf0; border-radius:10px; padding:10px; color:black;">
+                                <h5 class="fw-bold">Customer</h5>
+                                <p>@project.CustomerDetails</p>
+                            </div>
                         </div>
-                        <div class="col-4">
-                            <span class="">Max Occupancy : @project.PlcID adults </span><br />
-                            <span class="">Max Occupancy : @project.HmiID adults </span><br />
+
+                        <!-- RIGHT: PLC + HMI -->
+                        <div class="col-12 col-md-8">
+                            <!-- PLC -->
+                            <div class="mb-3" style="background-color:#ff6a00; border-radius:10px; padding:10px; color:white; position:relative;">
+                                <img src="images/home/PLC.jpg" alt="PLC" style="width:100px; height:200px; position:absolute; top:10px; right:10px; border-radius:5px;" />
+                                <h5 class="fw-bold">PLC</h5>
+                                <p>Id: @project.PlcID</p>
+                                <p>Name: @project.PLC?.Name</p>
+                                <p>Subnet X1: @project.PLC?.Subnet_X1</p>
+                                <p>IP X1: @project.PLC?.IP_X1</p>
+                                <p>Subnet X2: @project.PLC?.Subnet_X2</p>
+                                <p>IP X2: @project.PLC?.IP_X2</p>
+                                <p>Details: @project.PLC?.Details</p>
+                            </div>
+
+                            <!-- HMI -->
+                            <div style="background-color:#ff0a00; border-radius:10px; padding:10px; color:white; position:relative;">
+                                <img src="images/home/HMI.jpg" alt="HMI" style="width:150px; height:150px; position:absolute; top:10px; right:10px; border-radius:5px;" />
+                                <h5 class="fw-bold">HMI</h5>
+                                <p>Id: @project.HmiID</p>
+                                <p>Name: @project.HMI?.Name</p>
+                                <p>IP: @project.HMI?.IP</p>
+                                <p>Details: @project.HMI?.Details</p>
+                            </div>
                         </div>
                     </div>
                 </div>
