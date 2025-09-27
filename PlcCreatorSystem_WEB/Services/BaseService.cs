@@ -22,7 +22,7 @@ namespace PlcCreatorSystem_WEB.Services
         {
             try
             {
-                var client = httpClient.CreateClient("PLC_HW_CREATOR_API");
+                var client = httpClient.CreateClient("PLC_CREATOR_SYSTEM_API");
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(apiRequest.Url);

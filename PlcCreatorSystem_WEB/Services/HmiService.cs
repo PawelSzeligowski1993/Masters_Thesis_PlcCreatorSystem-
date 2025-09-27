@@ -12,7 +12,7 @@ namespace PlcCreatorSystem_WEB.Services
         public HmiService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory)
         {
             _clientFactory = clientFactory;
-            hmiUrl = configuration.GetValue<string>("ServiceUrls: Creator_API");
+            hmiUrl = configuration.GetValue<string>("ServiceUrls:Creator_API");
         }
 
         public Task<T> CreateAsync<T>(HmiCreateDTO dto)
