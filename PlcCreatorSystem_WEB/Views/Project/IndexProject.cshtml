@@ -1,0 +1,104 @@
+﻿@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.ProjectDTO>
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Project Number List</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <a asp-controller="Project" asp-action="CreateProject" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New Project</a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Project Number
+                </th>
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    PLC ID
+                </th>
+                <th>
+                    PLC Name
+                </th>
+                <th>
+                    HMI ID
+                </th>
+                <th>
+                    HMI Name
+                </th>
+                <th>
+                    Customer Details
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.PLC?.Id</td>
+                    <td>@item.PLC?.Name</td>
+                    <td>@item.HMI?.Id</td>
+                    <td>@item.HMI?.Name</td>
+                    <td>@item.CustomerDetails</td>
+                    <td class="@GetStatusClass(item.Status)">
+                        @item.Status
+                    </td>
+                    <td>
+                        <a asp-controller="Project" asp-action="UpdateProject" asp-route-id="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Project" asp-action="DeleteProject" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@functions {
+    public string GetStatusClass(object status)
+    {
+        var s = status?.ToString()?.Trim().ToLowerInvariant();
+
+        return s switch
+        {
+            "rejected" =>  "status-rejected",
+            "approved" => "status-approved",
+            "corrected" => "status-corrected",
+            "waiting_to_check" => "status-waiting",
+        };
+    }
+}
+
+<style>
+    td.status-rejected {
+        background-color: #dc3545 !important;
+        color: #fff !important;
+    }
+
+    td.status-approved {
+        background-color: #198754 !important;
+        color: #fff !important;
+    }
+
+    td.status-corrected {
+        background-color: #0d6efd !important;
+        color: #fff !important;
+    }
+
+    td.status-waiting {
+        background-color: #fd7e14 !important;
+        color: #fff !important;
+    }
+</style>
+

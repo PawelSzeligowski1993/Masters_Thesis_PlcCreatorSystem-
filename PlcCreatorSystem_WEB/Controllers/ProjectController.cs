@@ -75,8 +75,12 @@ namespace PlcCreatorSystem_WEB.Controllers
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
                 projectVM.project = _mapper.Map<ProjectUpdateDTO>(model);
+                //return View(_mapper.Map<ProjectUpdateDTO>(model));
+
+                await PopulateLookups(projectVM);
+                return View(projectVM);
             }
-            await PopulateLookups(projectVM);
+            
             return NotFound();
         }
 
