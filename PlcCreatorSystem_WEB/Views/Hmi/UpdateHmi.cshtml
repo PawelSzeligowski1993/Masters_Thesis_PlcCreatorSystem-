@@ -1,46 +1,52 @@
-﻿@model PlcCreatorSystem_WEB.Models.Dto.HmiDTO
+﻿@model PlcCreatorSystem_WEB.Models.Dto.HmiUpdateDTO
 
-<form asp-action="DeleteHmi">
+<form asp-action="UpdateHmi">
     <br />
     <div class="container border p-3">
-        <h1 class="text-primaey">DeleteHmi</h1>
+        <h1 class="text-primaey">Update Hmi</h1>
         <hr />
 
         <input hidden asp-for="Id" />
         <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-dnager"></div>
+
             <div class="col-2">
                 <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Name" disabled class="form-control" />
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
                 <label asp-for="IP" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP" disabled class="form-control" />
+                <input asp-for="IP" class="form-control" />
+                <span asp-validation-for="IP" class="text-danger"></span>
             </div>
 
             <div class="col-2">
                 <label asp-for="Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
-            <div class="col-10  pb-3">
-                <input asp-for="Identyfier" disabled class="form-control" />
+            <div class="col-10 pb-3">
+                <input asp-for="Identyfier" class="form-control" />
+                <span asp-validation-for="Identyfier" class="text-danger"></span>
             </div>
 
             <div class="col-2">
                 <label asp-for="Details" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10  pb-3">
-                <textarea asp-for="Details" disabled class="form-control" rows="5"></textarea>
+                <textarea asp-for="Details" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Details" class="text-danger"></span>
             </div>
 
             <div class="col-5 offset-2">
-                <a asp-action="IndexHmi" asp-controller="HMI" class="btn-primary btn form-control">Back to List</a>
+                <a asp-action="IndexHmi" asp-controller="Hmi" class="btn-primary btn form-control">Back to List</a>
             </div>
             <div class="col-5">
-                <input type="submit" value="Delete" class="btn btn-danger from-control" />
+                <input type="submit" value="Update" class="btn btn-success from-control" />
             </div>
         </div>
     </div>

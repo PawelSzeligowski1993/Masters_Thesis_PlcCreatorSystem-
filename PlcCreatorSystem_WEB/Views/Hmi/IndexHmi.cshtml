@@ -7,7 +7,7 @@
             <h1 class="text-primary">HMI List</h1>
         </div>
         <div class="col text-end pt-1">
-            <a asp-controller="Hmi" asp-action="IndexHmi" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New HMI</a>
+            <a asp-controller="Hmi" asp-action="CreateHmi" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New HMI</a>
         </div>
     </div>
 
@@ -38,8 +38,8 @@
                     <td>@item.Identyfier</td>
                     <td>@item.Details</td>
                     <td>
-                        <a asp-controller="HMI" asp-action="UpdateHmi" asp-route-villaId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                        <a asp-controller="HMI" asp-action="DeleteHmi" asp-route-villaId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+                        <a asp-controller="HMI" asp-action="UpdateHmi" asp-route-hmiId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="HMI" asp-action="DeleteHmi" asp-route-hmiId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
 
                     </td>
                 </tr>
