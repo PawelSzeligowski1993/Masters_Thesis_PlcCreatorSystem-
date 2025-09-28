@@ -37,7 +37,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateVilla(PlcCreateDTO model)
+        public async Task<IActionResult> CreatePlc(PlcCreateDTO model)
         {
 
             if (ModelState.IsValid)

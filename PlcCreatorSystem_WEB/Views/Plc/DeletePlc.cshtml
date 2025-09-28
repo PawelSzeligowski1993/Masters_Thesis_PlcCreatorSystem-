@@ -1,0 +1,72 @@
+﻿@model PlcCreatorSystem_WEB.Models.Dto.PlcDTO
+
+<form asp-action="DeletePlc">
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primaey">DeletePlc</h1>
+        <hr />
+
+        <input hidden asp-for="Id" />
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Subnet_X1" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="IP_X1" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Subnet_X2" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="IP_X2" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10  pb-3">
+                <input asp-for="Identyfier" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Details" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10  pb-3">
+                <textarea asp-for="Details" disabled class="form-control" rows="5"></textarea>
+            </div>
+
+            <div class="col-5 offset-2">
+                <a asp-action="IndexPlc" asp-controller="PLC" class="btn-primary btn form-control">Back to List</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Delete" class="btn btn-danger from-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
