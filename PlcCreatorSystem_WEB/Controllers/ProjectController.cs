@@ -116,9 +116,11 @@ namespace PlcCreatorSystem_WEB.Controllers
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
                 projectVM.project = model;
+
+                await PopulateLookups(projectVM);
+                return View(projectVM);
             }
 
-            await PopulateLookups(projectVM);
             return NotFound();
         }
 
