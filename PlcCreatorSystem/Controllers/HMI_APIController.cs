@@ -49,6 +49,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles ="admin")]
         [HttpGet("{id:int}", Name = "GetHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(HmiDTO), 200)]
@@ -83,6 +85,8 @@ namespace PlcCreatorSystem_API.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -119,6 +123,8 @@ namespace PlcCreatorSystem_API.Controllers
 
         [HttpDelete("{id:int}", Name = "DeleteHMI")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "custom")]
@@ -151,6 +157,8 @@ namespace PlcCreatorSystem_API.Controllers
 
         [HttpPut("{id:int}", Name = "UpdateHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> UpdateHMI(int id, [FromBody] HmiDTO updateDTO)
         {
@@ -179,6 +187,8 @@ namespace PlcCreatorSystem_API.Controllers
 
         [HttpPatch("{id:int}", Name = "UpdatePartialHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdatePartialHMI(int id, JsonPatchDocument<HmiUpdateDTO> patchDTO)
         {
