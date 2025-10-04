@@ -17,6 +17,9 @@ builder.Services.AddScoped<IPlcService, PlcService>();
 builder.Services.AddHttpClient<IHmiService, HmiService>();
 builder.Services.AddScoped<IHmiService, HmiService>();
 
+builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 var app = builder.Build();
 

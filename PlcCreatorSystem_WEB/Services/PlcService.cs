@@ -8,7 +8,7 @@ namespace PlcCreatorSystem_WEB.Services
     public class PlcService : BaseService, IPlcService
     {
         private readonly IHttpClientFactory _clientFactory;
-        private string plctUrl;
+        private string? plctUrl;
         public PlcService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory)
         {
             _clientFactory = clientFactory;
