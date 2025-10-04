@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -36,6 +37,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> CreateProject()
         {
             ProjectCreateVM projectVM = new();
@@ -43,6 +45,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(projectVM);
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(ProjectCreateVM model)
@@ -67,6 +70,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> UpdateProject(int id)
         {
             ProjectUpdateVM projectVM = new();
@@ -84,6 +88,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateProject(ProjectUpdateVM model)
@@ -108,6 +113,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             ProjectDeleteVM projectVM = new();
@@ -124,6 +130,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProject(ProjectDeleteVM model)

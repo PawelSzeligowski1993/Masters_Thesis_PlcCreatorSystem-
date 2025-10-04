@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Services.IServices;
+using System.Security.Claims;
 
 namespace PlcCreatorSystem_WEB.Controllers
 {
@@ -25,7 +30,27 @@ namespace PlcCreatorSystem_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
         {
-            return View(loginRequestDTO);
+            APIResponse response = await _authService.LoginAsync<APIResponse>(loginRequestDTO);
+            if(response != null && response.IsSuccess)
+            {
+                LoginResponseDTO loginResponseDTO = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
+
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.Name, loginResponseDTO.User.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Role, loginResponseDTO.User.Role)); //could be array of roles or loop the roles if multiple role are
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+
+                HttpContext.Session.SetString(SD.SessionToken, loginResponseDTO.Token);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError("CustomError", response.ErrorsMessages.FirstOrDefault());
+                return View(loginRequestDTO);
+            }
+            
         }
 
         [HttpGet]
@@ -44,7 +69,9 @@ namespace PlcCreatorSystem_WEB.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync();
+            HttpContext.Session.SetString(SD.SessionToken, "");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied() 

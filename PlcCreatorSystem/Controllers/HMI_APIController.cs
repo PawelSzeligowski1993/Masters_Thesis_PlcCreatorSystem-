@@ -25,7 +25,6 @@ namespace PlcCreatorSystem_API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetHMI()
         {

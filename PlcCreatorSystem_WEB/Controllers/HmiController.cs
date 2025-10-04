@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlcCreatorSystem_WEB.Models;
@@ -30,11 +31,13 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
+        [Authorize(Roles="addmin")]
         public async Task<IActionResult> CreateHmi()
         {
             return View();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateHmi(HmiCreateDTO model)
@@ -53,6 +56,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> UpdateHmi(int hmiId)
         {
             var response = await _hmiService.GetAsync<APIResponse>(hmiId);
@@ -64,6 +68,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateHmi(HmiUpdateDTO model)
@@ -82,6 +87,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> DeleteHmi(int hmiId)
         {
             var response = await _hmiService.GetAsync<APIResponse>(hmiId);
@@ -93,6 +99,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHmi(HmiDTO model)

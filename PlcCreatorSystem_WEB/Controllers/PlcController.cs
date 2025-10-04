@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PlcCreatorSystem_WEB.Models;
@@ -30,11 +31,13 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> CreatePlc()
         {
             return View();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePlc(PlcCreateDTO model)
@@ -53,6 +56,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> UpdatePlc(int plcId)
         {
             var response = await _plcService.GetAsync<APIResponse>(plcId);
@@ -64,6 +68,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePlc(PlcUpdateDTO model)
@@ -82,6 +87,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "addmin")]
         public async Task<IActionResult> DeletePlc(int plcId)
         {
             var response = await _plcService.GetAsync<APIResponse>(plcId);
@@ -93,6 +99,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "addmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePlc(PlcDTO model)
