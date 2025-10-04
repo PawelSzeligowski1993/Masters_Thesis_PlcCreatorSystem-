@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlcCreatorSystem_API.Models;
@@ -24,6 +25,7 @@ namespace PlcCreatorSystem_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetHMI()
         {
@@ -44,6 +46,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
+        [Authorize(Roles ="admin")]
         [HttpGet("{id:int}", Name = "GetHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,6 +81,7 @@ namespace PlcCreatorSystem_API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -117,6 +121,7 @@ namespace PlcCreatorSystem_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "custom")]
         public async Task<ActionResult<APIResponse>> DeleteHMI(int id)
         {
             try

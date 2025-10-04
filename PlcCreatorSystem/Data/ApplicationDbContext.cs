@@ -12,6 +12,7 @@ namespace PlcCreatorSystem_API.Data
         {
 
         }
+        public DbSet<LocalUser> LocalUsers { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<PLC> PLCs { get; set; }
         public DbSet<HMI> HMIs { get; set; }
