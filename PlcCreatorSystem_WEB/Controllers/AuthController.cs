@@ -15,7 +15,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Login()
         {
             LoginRequestDTO loginRequestDTO = new();
             return View(loginRequestDTO);

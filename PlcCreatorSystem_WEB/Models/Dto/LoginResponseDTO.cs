@@ -1,5 +1,4 @@
-﻿using PlcCreatorSystem_API.Models;
-using PlcCreatorSystem_WEB.Models;
+﻿using PlcCreatorSystem_WEB.Models;
 
 namespace PlcCreatorSystem_WEB.Models.Dto
 {
