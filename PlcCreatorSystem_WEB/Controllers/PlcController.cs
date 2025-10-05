@@ -32,13 +32,13 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreatePlc()
         {
             return View();
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePlc(PlcCreateDTO model)
@@ -57,7 +57,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdatePlc(int plcId)
         {
             var response = await _plcService.GetAsync<APIResponse>(plcId, HttpContext.Session.GetString(SD.SessionToken));
@@ -69,7 +69,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePlc(PlcUpdateDTO model)
@@ -88,7 +88,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeletePlc(int plcId)
         {
             var response = await _plcService.GetAsync<APIResponse>(plcId, HttpContext.Session.GetString(SD.SessionToken));
@@ -100,7 +100,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePlc(PlcDTO model)
