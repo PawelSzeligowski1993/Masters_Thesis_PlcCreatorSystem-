@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Services.IServices;
@@ -22,7 +23,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> IndexPlc()
         {
             List<PlcDTO> list = new();
-            var response = await _plcService.GetAllAsync<APIResponse>();
+            var response = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<PlcDTO>>(Convert.ToString(response.Result));
@@ -45,7 +46,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _plcService.CreateAsync<APIResponse>(model);
+                var response = await _plcService.CreateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     TempData["success"] = "Plc created successfully";
@@ -59,7 +60,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         [Authorize(Roles = "addmin")]
         public async Task<IActionResult> UpdatePlc(int plcId)
         {
-            var response = await _plcService.GetAsync<APIResponse>(plcId);
+            var response = await _plcService.GetAsync<APIResponse>(plcId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 PlcDTO model = JsonConvert.DeserializeObject<PlcDTO>(Convert.ToString(response.Result));
@@ -77,7 +78,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             if (ModelState.IsValid)
             {
                 TempData["success"] = "Plc updated successfully";
-                var response = await _plcService.UpdateAsync<APIResponse>(model);
+                var response = await _plcService.UpdateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexPlc));
@@ -90,7 +91,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         [Authorize(Roles = "addmin")]
         public async Task<IActionResult> DeletePlc(int plcId)
         {
-            var response = await _plcService.GetAsync<APIResponse>(plcId);
+            var response = await _plcService.GetAsync<APIResponse>(plcId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 PlcDTO model = JsonConvert.DeserializeObject<PlcDTO>(Convert.ToString(response.Result));
@@ -104,7 +105,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePlc(PlcDTO model)
         {
-            var response = await _plcService.DeleteAsync<APIResponse>(model.Id);
+            var response = await _plcService.DeleteAsync<APIResponse>(model.Id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Plc deleted successfully";

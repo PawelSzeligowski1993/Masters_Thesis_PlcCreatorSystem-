@@ -1,4 +1,5 @@
-﻿using PlcCreatorSystem_Utility;
+﻿using Newtonsoft.Json.Linq;
+using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Services.IServices;
@@ -15,50 +16,55 @@ namespace PlcCreatorSystem_WEB.Services
             plctUrl = configuration.GetValue<string>("ServiceUrls:Creator_API");
         }
 
-        public Task<T> CreateAsync<T>(PlcCreateDTO dto)
+        public Task<T> CreateAsync<T>(PlcCreateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = plctUrl + "/api/PLC_API/"
+                Url = plctUrl + "/api/PLC_API/",
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = plctUrl + "/api/PLC_API/" + id
+                Url = plctUrl + "/api/PLC_API/" + id,
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = plctUrl + "/api/PLC_API/"
+                Url = plctUrl + "/api/PLC_API/",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = plctUrl + "/api/PLC_API/" + id
+                Url = plctUrl + "/api/PLC_API/" + id,
+                Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(PlcUpdateDTO dto)
+        public Task<T> UpdateAsync<T>(PlcUpdateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = plctUrl + "/api/PLC_API/" + dto.Id
+                Url = plctUrl + "/api/PLC_API/" + dto.Id,
+                Token = token
             });
         }
     }

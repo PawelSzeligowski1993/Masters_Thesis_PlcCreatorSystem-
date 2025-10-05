@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Models.VM;
@@ -28,7 +29,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> IndexProject()
         {
             List<ProjectDTO>? list = new();
-            var response = await _projectService.GetAllAsync<APIResponse>();
+            var response = await _projectService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
@@ -53,7 +54,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _projectService.CreateAsync<APIResponse>(model.project);
+                var response = await _projectService.CreateAsync<APIResponse>(model.project, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexProject));
@@ -74,7 +75,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> UpdateProject(int id)
         {
             ProjectUpdateVM projectVM = new();
-            var response = await _projectService.GetAsync<APIResponse>(id);
+            var response = await _projectService.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
@@ -96,7 +97,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _projectService.UpdateAsync<APIResponse>(model.project);
+                var response = await _projectService.UpdateAsync<APIResponse>(model.project, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexProject));
@@ -117,7 +118,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> DeleteProject(int id)
         {
             ProjectDeleteVM projectVM = new();
-            var response = await _projectService.GetAsync<APIResponse>(id);
+            var response = await _projectService.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
@@ -135,7 +136,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProject(ProjectDeleteVM model)
         {
-            var response = await _projectService.DeleteAsync<APIResponse>(model.project.Id);
+            var response = await _projectService.DeleteAsync<APIResponse>(model.project.Id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 return RedirectToAction(nameof(IndexProject));
@@ -149,7 +150,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         // --------------------------- Populate View with PLC and HMI -----------------------------
         private async Task PopulateLookups(ProjectCreateVM model)
         {
-            var responsePlc = await _plcService.GetAllAsync<APIResponse>();
+            var responsePlc = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responsePlc != null && responsePlc.IsSuccess == true)
             {
                 model.plcList = JsonConvert.DeserializeObject<List<PlcDTO>>
@@ -160,7 +161,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                     });
             }
 
-            var responseHmi = await _hmiService.GetAllAsync<APIResponse>();
+            var responseHmi = await _hmiService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responseHmi != null && responseHmi.IsSuccess)
             {
                 model.hmiList = JsonConvert.DeserializeObject<List<HmiDTO>>
@@ -174,7 +175,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
         private async Task PopulateLookups(ProjectUpdateVM model)
         {
-            var responsePlc = await _plcService.GetAllAsync<APIResponse>();
+            var responsePlc = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responsePlc != null && responsePlc.IsSuccess)
             {
                 model.plcList = JsonConvert.DeserializeObject<List<PlcDTO>>
@@ -185,7 +186,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                     });
             }
 
-            var responseHmi = await _hmiService.GetAllAsync<APIResponse>();
+            var responseHmi = await _hmiService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responseHmi != null && responseHmi.IsSuccess)
             {
                 model.hmiList = JsonConvert.DeserializeObject<List<HmiDTO>>
@@ -199,7 +200,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
         private async Task PopulateLookups(ProjectDeleteVM model)
         {
-            var responsePlc = await _plcService.GetAllAsync<APIResponse>();
+            var responsePlc = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responsePlc != null && responsePlc.IsSuccess)
             {
                 model.plcList = JsonConvert.DeserializeObject<List<PlcDTO>>
@@ -210,7 +211,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                     });
             }
 
-            var responseHmi = await _hmiService.GetAllAsync<APIResponse>();
+            var responseHmi = await _hmiService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responseHmi != null && responseHmi.IsSuccess)
             {
                 model.hmiList = JsonConvert.DeserializeObject<List<HmiDTO>>

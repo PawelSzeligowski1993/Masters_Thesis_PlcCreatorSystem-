@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Services.IServices;
@@ -22,7 +23,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> IndexHmi()
         {
             List<HmiDTO> list = new();
-            var response = await _hmiService.GetAllAsync<APIResponse>();
+            var response = await _hmiService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<HmiDTO>>(Convert.ToString(response.Result));
@@ -31,13 +32,13 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
-        [Authorize(Roles="addmin")]
+        [Authorize(Roles="admin")]
         public async Task<IActionResult> CreateHmi()
         {
             return View();
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateHmi(HmiCreateDTO model)
@@ -45,7 +46,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _hmiService.CreateAsync<APIResponse>(model);
+                var response = await _hmiService.CreateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     TempData["success"] = "HMI created successfully";
@@ -56,10 +57,10 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateHmi(int hmiId)
         {
-            var response = await _hmiService.GetAsync<APIResponse>(hmiId);
+            var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 HmiDTO model = JsonConvert.DeserializeObject<HmiDTO>(Convert.ToString(response.Result));
@@ -68,7 +69,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateHmi(HmiUpdateDTO model)
@@ -77,7 +78,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             if (ModelState.IsValid)
             {
                 TempData["success"] = "Hmi updated successfully";
-                var response = await _hmiService.UpdateAsync<APIResponse>(model);
+                var response = await _hmiService.UpdateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexHmi));
@@ -87,10 +88,10 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteHmi(int hmiId)
         {
-            var response = await _hmiService.GetAsync<APIResponse>(hmiId);
+            var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 HmiDTO model = JsonConvert.DeserializeObject<HmiDTO>(Convert.ToString(response.Result));
@@ -99,12 +100,12 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "addmin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHmi(HmiDTO model)
         {
-            var response = await _hmiService.DeleteAsync<APIResponse>(model.Id);
+            var response = await _hmiService.DeleteAsync<APIResponse>(model.Id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "HMI deleted successfully";

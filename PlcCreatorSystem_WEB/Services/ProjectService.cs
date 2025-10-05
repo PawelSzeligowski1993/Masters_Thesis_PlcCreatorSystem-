@@ -16,50 +16,55 @@ namespace PlcCreatorSystem_WEB.Services
             projectUrl = configuration.GetValue<string>("ServiceUrls:Creator_API");
         }
 
-        public Task<T> CreateAsync<T>(ProjectCreateDTO dto)
+        public Task<T> CreateAsync<T>(ProjectCreateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = projectUrl + "/api/Project_API/"
+                Url = projectUrl + "/api/Project_API/",
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = projectUrl + "/api/Project_API/" + id
+                Url = projectUrl + "/api/Project_API/" + id,
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = projectUrl + "/api/Project_API/"
+                Url = projectUrl + "/api/Project_API/",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = projectUrl + "/api/Project_API/" + id
+                Url = projectUrl + "/api/Project_API/" + id,
+                Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(ProjectUpdateDTO dto)
+        public Task<T> UpdateAsync<T>(ProjectUpdateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = projectUrl + "/api/Project_API/" + dto.Id
+                Url = projectUrl + "/api/Project_API/" + dto.Id,
+                Token = token
             });
         }
     }

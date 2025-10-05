@@ -2,6 +2,7 @@
 using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Services.IServices;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace PlcCreatorSystem_WEB.Services
@@ -48,6 +49,11 @@ namespace PlcCreatorSystem_WEB.Services
                 }
 
                 HttpResponseMessage apiResponse = null;
+
+                if(!string.IsNullOrEmpty(apiRequest.Token)) 
+                { 
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
+                }
 
                 apiResponse = await client.SendAsync(message);
 

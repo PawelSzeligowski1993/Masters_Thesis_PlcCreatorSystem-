@@ -4,10 +4,10 @@ namespace PlcCreatorSystem_WEB.Services.IServices
 {
     public interface IPlcService
     {
-        Task<T> GetAllAsync<T>();
-        Task<T> GetAsync<T>(int id);
-        Task<T> CreateAsync<T>(PlcCreateDTO dto);
-        Task<T> UpdateAsync<T>(PlcUpdateDTO dto);
-        Task<T> DeleteAsync<T>(int id);
+        Task<T> GetAllAsync<T>(string token);
+        Task<T> GetAsync<T>(int id, string token);
+        Task<T> CreateAsync<T>(PlcCreateDTO dto, string token);
+        Task<T> UpdateAsync<T>(PlcUpdateDTO dto, string token);
+        Task<T> DeleteAsync<T>(int id, string token);
     }
 }

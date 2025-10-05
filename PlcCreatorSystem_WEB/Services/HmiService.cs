@@ -15,50 +15,55 @@ namespace PlcCreatorSystem_WEB.Services
             hmiUrl = configuration.GetValue<string>("ServiceUrls:Creator_API");
         }
 
-        public Task<T> CreateAsync<T>(HmiCreateDTO dto)
+        public Task<T> CreateAsync<T>(HmiCreateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = hmiUrl + "/api/HMI_API/"
+                Url = hmiUrl + "/api/HMI_API/",
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = hmiUrl + "/api/HMI_API/" + id
+                Url = hmiUrl + "/api/HMI_API/" + id,
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = hmiUrl + "/api/HMI_API/"
+                Url = hmiUrl + "/api/HMI_API/",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = hmiUrl + "/api/HMI_API/" + id
+                Url = hmiUrl + "/api/HMI_API/" + id,
+                Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(HmiUpdateDTO dto)
+        public Task<T> UpdateAsync<T>(HmiUpdateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = hmiUrl + "/api/HMI_API/" + dto.Id
+                Url = hmiUrl + "/api/HMI_API/" + dto.Id,
+                Token = token
             });
         }
     }

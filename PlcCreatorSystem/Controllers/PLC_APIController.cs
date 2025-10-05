@@ -6,6 +6,7 @@ using PlcCreatorSystem_API.Models;
 using PlcCreatorSystem_API.Repository.IRepository;
 using System.Net;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlcCreatorSystem_API.Controllers
 {
@@ -45,6 +46,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("{id:int}", Name = "GetPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,6 +80,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -114,6 +117,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id:int}", Name = "DeletePLC")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -145,6 +149,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:int}", Name = "UpdatePlc")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -173,6 +178,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPatch("{id:int}", Name = "UpdatePartialPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
