@@ -19,5 +19,12 @@
             waiting_to_check
         }
 
+        public enum Role
+        {
+            admin,
+            enginner,
+            custom
+        }
+
     }
 }
