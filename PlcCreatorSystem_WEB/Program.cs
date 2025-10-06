@@ -18,6 +18,9 @@ builder.Services.AddScoped<IPlcService, PlcService>();
 builder.Services.AddHttpClient<IHmiService, HmiService>();
 builder.Services.AddScoped<IHmiService, HmiService>();
 
+builder.Services.AddHttpClient<IUserService, AuthService>();
+builder.Services.AddScoped<IUserService, AuthService>();
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

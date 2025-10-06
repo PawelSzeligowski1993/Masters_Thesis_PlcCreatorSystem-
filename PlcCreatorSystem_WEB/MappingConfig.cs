@@ -19,6 +19,9 @@ namespace PlcCreatorSystem_WEB
             //PLC Mapper
             CreateMap<PlcDTO, PlcCreateDTO>().ReverseMap();
             CreateMap<PlcDTO, PlcUpdateDTO>().ReverseMap();
+
+            //User Mapper
+            CreateMap<UserDTO, UserUpdateDTO>().ReverseMap();
         }
     }
 }

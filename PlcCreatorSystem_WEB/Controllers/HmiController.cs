@@ -32,13 +32,13 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
-        [Authorize(Roles="admin")]
+        [Authorize(Roles="admin,enginner")]
         public async Task<IActionResult> CreateHmi()
         {
             return View();
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateHmi(HmiCreateDTO model)
@@ -57,7 +57,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         public async Task<IActionResult> UpdateHmi(int hmiId)
         {
             var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
@@ -69,7 +69,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateHmi(HmiUpdateDTO model)
@@ -88,7 +88,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         public async Task<IActionResult> DeleteHmi(int hmiId)
         {
             var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
@@ -100,7 +100,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHmi(HmiDTO model)

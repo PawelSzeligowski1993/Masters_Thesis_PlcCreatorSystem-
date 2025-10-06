@@ -1,0 +1,46 @@
+﻿@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.UserDTO>
+
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Users List</h1>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    UserName
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Password
+                </th>
+                <th>
+                    Role
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.UserName</td>
+                    <td>@item.Name</td>
+                    <td>@item.Password</td>
+                    <td>@item.Role</td>
+                    <td>
+                        <a asp-controller="Auth" asp-action="UpdateUser" asp-route-userId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Auth" asp-action="DeleteUser" asp-route-userId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
