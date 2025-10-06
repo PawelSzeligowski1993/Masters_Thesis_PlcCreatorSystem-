@@ -9,12 +9,17 @@ using System.Text;
 
 namespace PlcCreatorSystem_API.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : Repository<LocalUser>, IUserRepository
     {
         private readonly ApplicationDbContext _db;
         private string secretKey;
 
-        public UserRepository(ApplicationDbContext db, IConfiguration configuration)
+        public UserRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public UserRepository(ApplicationDbContext db, IConfiguration configuration) : base(db)
         {
             _db = db;
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
@@ -94,6 +99,15 @@ namespace PlcCreatorSystem_API.Repository
             _db.SaveChanges();
             user.Password = "";
             return user;
+        }
+
+        //method permited to use only by administrator
+        public async Task<LocalUser> UpdateAsync(LocalUser entity)
+        {
+            //entity.UpdatedDate = DateTime.Now;
+            _db.LocalUsers.Update(entity);
+            await _db.SaveChangesAsync();
+            return entity;
         }
     }
 }

@@ -46,7 +46,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpGet("{id:int}", Name = "GetPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -80,7 +80,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,7 +117,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpDelete("{id:int}", Name = "DeletePLC")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -149,7 +149,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPut("{id:int}", Name = "UpdatePlc")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -178,7 +178,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPatch("{id:int}", Name = "UpdatePartialPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

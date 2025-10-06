@@ -45,7 +45,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles ="admin,enginner")]
         [HttpGet("{id:int}", Name = "GetHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -81,7 +81,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -120,7 +120,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpDelete("{id:int}", Name = "DeleteHMI")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -154,7 +154,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPut("{id:int}", Name = "UpdateHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -185,7 +185,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,enginner")]
         [HttpPatch("{id:int}", Name = "UpdatePartialHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
