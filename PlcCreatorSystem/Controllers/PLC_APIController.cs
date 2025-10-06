@@ -25,6 +25,7 @@ namespace PlcCreatorSystem_API.Controllers
             this._response = new();
         }
 
+        //[Authorize(Roles = "admin,enginner,custom")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetPLC()

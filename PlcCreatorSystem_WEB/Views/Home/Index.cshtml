@@ -1,63 +1,77 @@
 ﻿@using Microsoft.AspNetCore.Components;
+@using PlcCreatorSystem_Utility;
 @model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.ProjectDTO>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
+
+@{
+    var user = httpAcc.HttpContext.User;
+    var role = user?.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+    var token = httpAcc.HttpContext?.Session.GetString(SD.SessionToken);
+}
+
+
 
 <img class="d-block w-100" src="images/home/home1.jpg" alt="">
 
 <hr />
 <div class="row" style="--bs-gutter-x:0">
-    @foreach (var project in Model)
+    @if (!string.IsNullOrEmpty(token))
     {
-        <div class="p-4 col-md-12 col-lg-6">
-            <div class="row" style="border-radius:20px; border: 1px solid #ffffff;
+        @foreach (var project in Model)
+        {
+            <div class="p-4 col-md-12 col-lg-6">
+                <div class="row" style="border-radius:20px; border: 1px solid #ffffff;
                                     background-image:url('images/home/project.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;";>
-                <div class="col-12">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <p class="card-title text-warning mb-0" style="font-size:xx-large">@project.Name</p>
-                        <span class="status-badge @GetStatusClass(project.Status)">
-                            Project Status: @project.Status
-                        </span>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row pb-3 pt-2 align-items-start">
-                        <!-- LEFT: Edit + Customer -->
-                        <div class="col-12 col-md-4">
-                            <a asp-controller="Project" asp-action="IndexProject" class="btn btn-success form-control mb-3">Go To Project list</a>
-                            <div style="background-color:#0ffaf0; border-radius:10px; padding:10px; color:black;">
-                                <h5 class="fw-bold">Customer</h5>
-                                <p>@project.CustomerDetails</p>
-                            </div>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p class="card-title text-warning mb-0" style="font-size:xx-large">@project.Name</p>
+                            <span class="status-badge @GetStatusClass(project.Status)">
+                                Project Status: @project.Status
+                            </span>
                         </div>
-
-                        <!-- RIGHT: PLC + HMI -->
-                        <div class="col-12 col-md-8">
-                            <!-- PLC -->
-                            <div class="mb-3" style="background-color:#00d49b; border-radius:10px; padding:10px; color:white; position:relative;">
-                                <img src="images/home/PLC.jpg" alt="PLC" style="width:100px; height:200px; position:absolute; top:10px; right:10px; border-radius:5px;" />
-                                <h5 class="fw-bold">PLC</h5>
-                                <p>Id: @project.PlcID</p>
-                                <p>Name: @project.PLC?.Name</p>
-                                <p>Subnet X1: @project.PLC?.Subnet_X1</p>
-                                <p>IP X1: @project.PLC?.IP_X1</p>
-                                <p>Subnet X2: @project.PLC?.Subnet_X2</p>
-                                <p>IP X2: @project.PLC?.IP_X2</p>
-                                <p>Details: @project.PLC?.Details</p>
+                    </div>
+                    <div class="col-12">
+                        <div class="row pb-3 pt-2 align-items-start">
+                            <!-- LEFT: Edit + Customer -->
+                            <div class="col-12 col-md-4">
+                                <a asp-controller="Project" asp-action="IndexProject" class="btn btn-success form-control mb-3">Go To Project list</a>
+                                <div style="background-color:#0ffaf0; border-radius:10px; padding:10px; color:black;">
+                                    <h5 class="fw-bold">Customer</h5>
+                                    <p>@project.CustomerDetails</p>
+                                </div>
                             </div>
 
-                            <!-- HMI -->
-                            <div style="background-color:#481800; border-radius:10px; padding:10px; color:white; position:relative;">
-                                <img src="images/home/HMI.jpg" alt="HMI" style="width:150px; height:150px; position:absolute; top:10px; right:10px; border-radius:5px;" />
-                                <h5 class="fw-bold">HMI</h5>
-                                <p>Id: @project.HmiID</p>
-                                <p>Name: @project.HMI?.Name</p>
-                                <p>IP: @project.HMI?.IP</p>
-                                <p>Details: @project.HMI?.Details</p>
+                            <!-- RIGHT: PLC + HMI -->
+                            <div class="col-12 col-md-8">
+                                <!-- PLC -->
+                                <div class="mb-3" style="background-color:#00d49b; border-radius:10px; padding:10px; color:white; position:relative;">
+                                    <img src="images/home/PLC.jpg" alt="PLC" style="width:100px; height:200px; position:absolute; top:10px; right:10px; border-radius:5px;" />
+                                    <h5 class="fw-bold">PLC</h5>
+                                    <p>Id: @project.PlcID</p>
+                                    <p>Name: @project.PLC?.Name</p>
+                                    <p>Subnet X1: @project.PLC?.Subnet_X1</p>
+                                    <p>IP X1: @project.PLC?.IP_X1</p>
+                                    <p>Subnet X2: @project.PLC?.Subnet_X2</p>
+                                    <p>IP X2: @project.PLC?.IP_X2</p>
+                                    <p>Details: @project.PLC?.Details</p>
+                                </div>
+
+                                <!-- HMI -->
+                                <div style="background-color:#481800; border-radius:10px; padding:10px; color:white; position:relative;">
+                                    <img src="images/home/HMI.jpg" alt="HMI" style="width:150px; height:150px; position:absolute; top:10px; right:10px; border-radius:5px;" />
+                                    <h5 class="fw-bold">HMI</h5>
+                                    <p>Id: @project.HmiID</p>
+                                    <p>Name: @project.HMI?.Name</p>
+                                    <p>IP: @project.HMI?.IP</p>
+                                    <p>Details: @project.HMI?.Details</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+
     }
 </div>
 

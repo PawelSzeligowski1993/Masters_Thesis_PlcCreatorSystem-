@@ -20,6 +20,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             _mapper = mapper;
         }
 
+        //[Authorize(Roles = "admin,enginner,custom")]
         public async Task<IActionResult> IndexHmi()
         {
             List<HmiDTO> list = new();

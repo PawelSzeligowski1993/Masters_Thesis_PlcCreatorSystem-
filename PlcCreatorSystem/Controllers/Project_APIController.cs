@@ -28,6 +28,7 @@ namespace PlcCreatorSystem_API.Controllers
             _dbHMI = dbHMI;
         }
 
+        //[Authorize(Roles = "admin,enginner,custom")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetProjects()

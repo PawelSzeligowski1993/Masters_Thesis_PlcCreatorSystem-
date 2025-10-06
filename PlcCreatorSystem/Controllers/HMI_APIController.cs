@@ -23,7 +23,7 @@ namespace PlcCreatorSystem_API.Controllers
             _mapper = mapper;
             this._response = new();
         }
-
+        //[Authorize(Roles = "admin,enginner,custom")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetHMI()

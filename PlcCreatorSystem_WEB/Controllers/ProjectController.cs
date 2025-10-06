@@ -26,6 +26,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             _hmiService = hmiService;
         }
 
+        //[Authorize(Roles = "admin,enginner,custom")]
         public async Task<IActionResult> IndexProject()
         {
             List<ProjectDTO>? list = new();
