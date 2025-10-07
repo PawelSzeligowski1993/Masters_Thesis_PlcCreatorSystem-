@@ -26,7 +26,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             _hmiService = hmiService;
         }
 
-        //[Authorize(Roles = "admin,enginner,custom")]
+        [Authorize(Roles = "admin,engineer,custom")]
         public async Task<IActionResult> IndexProject()
         {
             List<ProjectDTO>? list = new();
@@ -39,7 +39,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> CreateProject()
         {
             ProjectCreateVM projectVM = new();
@@ -47,7 +47,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(projectVM);
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(ProjectCreateVM model)
@@ -72,7 +72,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> UpdateProject(int id)
         {
             ProjectUpdateVM projectVM = new();
@@ -90,7 +90,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateProject(ProjectUpdateVM model)
@@ -115,7 +115,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             ProjectDeleteVM projectVM = new();
@@ -132,7 +132,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProject(ProjectDeleteVM model)

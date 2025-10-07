@@ -61,15 +61,17 @@ namespace PlcCreatorSystem_WEB.Services
                 try
                 {
                     var ApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
-                    if (apiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest
-                        || apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound
-                        || ApiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                    {
-                        ApiResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                        ApiResponse.IsSuccess = false;
-                        var res = JsonConvert.SerializeObject(ApiResponse);
-                        var returnObj = JsonConvert.DeserializeObject<T>(res);
-                        return returnObj;
+                    if(ApiResponse != null) { 
+                        if (apiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest
+                            || apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound
+                            || ApiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                        {
+                            ApiResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                            ApiResponse.IsSuccess = false;
+                            var res = JsonConvert.SerializeObject(ApiResponse);
+                            var returnObj = JsonConvert.DeserializeObject<T>(res);
+                            return returnObj;
+                        }
                     }
                 }
                 catch (Exception e)

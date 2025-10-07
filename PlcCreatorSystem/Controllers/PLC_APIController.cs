@@ -25,7 +25,7 @@ namespace PlcCreatorSystem_API.Controllers
             this._response = new();
         }
 
-        //[Authorize(Roles = "admin,enginner,custom")]
+        [Authorize(Roles = "admin,engineer,custom")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetPLC()
@@ -47,7 +47,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpGet("{id:int}", Name = "GetPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -81,7 +81,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -118,7 +118,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpDelete("{id:int}", Name = "DeletePLC")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -150,7 +150,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPut("{id:int}", Name = "UpdatePlc")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -179,7 +179,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPatch("{id:int}", Name = "UpdatePartialPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

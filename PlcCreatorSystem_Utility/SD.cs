@@ -22,7 +22,7 @@
         public enum Role
         {
             admin,
-            enginner,
+            engineer,
             custom
         }
 

@@ -20,7 +20,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize(Roles = "admin,enginner,custom")]
+        [Authorize(Roles = "admin,engineer,custom")]
         public async Task<IActionResult> IndexHmi()
         {
             List<HmiDTO> list = new();
@@ -33,13 +33,13 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
-        [Authorize(Roles="admin,enginner")]
+        [Authorize(Roles= "admin,engineer")]
         public async Task<IActionResult> CreateHmi()
         {
             return View();
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateHmi(HmiCreateDTO model)
@@ -58,7 +58,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> UpdateHmi(int hmiId)
         {
             var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
@@ -70,7 +70,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateHmi(HmiUpdateDTO model)
@@ -89,7 +89,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> DeleteHmi(int hmiId)
         {
             var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
@@ -101,7 +101,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHmi(HmiDTO model)

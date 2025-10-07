@@ -23,7 +23,7 @@ namespace PlcCreatorSystem_API.Controllers
             _mapper = mapper;
             this._response = new();
         }
-        //[Authorize(Roles = "admin,enginner,custom")]
+        [Authorize(Roles = "admin,engineer,custom")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetHMI()
@@ -45,7 +45,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles ="admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpGet("{id:int}", Name = "GetHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -81,7 +81,7 @@ namespace PlcCreatorSystem_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -120,7 +120,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpDelete("{id:int}", Name = "DeleteHMI")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -154,7 +154,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPut("{id:int}", Name = "UpdateHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -185,7 +185,7 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,enginner")]
+        [Authorize(Roles = "admin,engineer")]
         [HttpPatch("{id:int}", Name = "UpdatePartialHMI")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

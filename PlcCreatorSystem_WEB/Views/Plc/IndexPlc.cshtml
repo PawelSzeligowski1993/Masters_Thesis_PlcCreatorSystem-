@@ -1,4 +1,11 @@
-﻿@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.PlcDTO>
+﻿@using PlcCreatorSystem_Utility;
+@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.PlcDTO>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
+@{
+    var user = httpAcc.HttpContext.User;
+    var role = user?.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+    var token = httpAcc.HttpContext?.Session.GetString(SD.SessionToken);
+}
 
 <br />
 <div class="container p-4 border">
@@ -6,11 +13,13 @@
         <div class="col">
             <h1 class="text-primary">Plc List</h1>
         </div>
-        <div class="col text-end pt-1">
-            <a asp-controller="Plc" asp-action="CreatePlc" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New PLC</a>
-        </div>
+        @if ((string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)) || (string.Equals(role, "engineer", StringComparison.OrdinalIgnoreCase)))
+        {
+            <div class="col text-end pt-1">
+                <a asp-controller="Plc" asp-action="CreatePlc" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New PLC</a>
+            </div>
+        }
     </div>
-
     <table class="table">
         <thead>
             <tr>
@@ -49,11 +58,14 @@
                     <td>@item.IP_X2</td>
                     <td>@item.Identyfier</td>
                     <td>@item.Details</td>
-                    <td>
-                        <a asp-controller="PLC" asp-action="UpdatePlc" asp-route-plcId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                        <a asp-controller="PLC" asp-action="DeletePlc" asp-route-plcId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+                    @if ((string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)) || (string.Equals(role, "engineer", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        <td>
+                            <a asp-controller="PLC" asp-action="UpdatePlc" asp-route-plcId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-controller="PLC" asp-action="DeletePlc" asp-route-plcId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
 
-                    </td>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

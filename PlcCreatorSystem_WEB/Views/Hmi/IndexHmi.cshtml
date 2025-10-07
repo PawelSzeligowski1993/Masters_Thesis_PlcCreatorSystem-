@@ -1,4 +1,11 @@
-﻿@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.HmiDTO>
+﻿@using PlcCreatorSystem_Utility;
+@model IEnumerable<PlcCreatorSystem_WEB.Models.Dto.HmiDTO>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
+@{
+    var user = httpAcc.HttpContext.User;
+    var role = user?.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+    var token = httpAcc.HttpContext?.Session.GetString(SD.SessionToken);
+}
 
 <br />
 <div class="container p-4 border">
@@ -6,9 +13,12 @@
         <div class="col">
             <h1 class="text-primary">HMI List</h1>
         </div>
-        <div class="col text-end pt-1">
-            <a asp-controller="Hmi" asp-action="CreateHmi" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New HMI</a>
-        </div>
+        @if ((string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)) || (string.Equals(role, "engineer", StringComparison.OrdinalIgnoreCase)))
+        {
+            <div class="col text-end pt-1">
+                <a asp-controller="Hmi" asp-action="CreateHmi" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create New HMI</a>
+            </div>
+        }
     </div>
 
     <table class="table">
@@ -37,11 +47,14 @@
                     <td>@item.IP</td>
                     <td>@item.Identyfier</td>
                     <td>@item.Details</td>
-                    <td>
-                        <a asp-controller="HMI" asp-action="UpdateHmi" asp-route-hmiId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                        <a asp-controller="HMI" asp-action="DeleteHmi" asp-route-hmiId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+                    @if ((string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)) || (string.Equals(role, "engineer", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        <td>
+                            <a asp-controller="HMI" asp-action="UpdateHmi" asp-route-hmiId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-controller="HMI" asp-action="DeleteHmi" asp-route-hmiId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
 
-                    </td>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
