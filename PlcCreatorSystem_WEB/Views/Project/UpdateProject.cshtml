@@ -57,7 +57,9 @@
                 <label asp-for="project.Status" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="project.Status" class="form-control" />
+                <select asp-for="project.Status" class="form-select" asp-items="Model.statusList">
+                    <option disabled selected>-- Select Status --</option>
+                </select>
                 <span asp-validation-for="project.Status" class="text-danger"></span>
             </div>
 

@@ -8,6 +8,7 @@ using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Models.VM;
 using PlcCreatorSystem_WEB.Services.IServices;
+using PlcCreatorSystem_Utility;
 
 namespace PlcCreatorSystem_WEB.Controllers
 {
@@ -44,6 +45,8 @@ namespace PlcCreatorSystem_WEB.Controllers
         {
             ProjectCreateVM projectVM = new();
             await PopulateLookups(projectVM);
+            //default status = "waiting_to_check"
+            projectVM.project.Status = SD.ProjectStatus.waiting_to_check;
             return View(projectVM);
         }
 
@@ -52,6 +55,9 @@ namespace PlcCreatorSystem_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(ProjectCreateVM model)
         {
+            //default status = "waiting_to_check"
+            ModelState.Remove("project.Status");
+            model.project.Status = SD.ProjectStatus.waiting_to_check;
 
             if (ModelState.IsValid)
             {
@@ -172,6 +178,14 @@ namespace PlcCreatorSystem_WEB.Controllers
                         Value = i.Id.ToString()
                     });
             }
+
+            model.statusList = Enum.GetValues(typeof(SD.ProjectStatus)).Cast<SD.ProjectStatus>()
+                .Select(i => new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString(),
+                    Selected = (i == SD.ProjectStatus.waiting_to_check)
+                });
         }
 
         private async Task PopulateLookups(ProjectUpdateVM model)
@@ -197,6 +211,13 @@ namespace PlcCreatorSystem_WEB.Controllers
                         Value = i.Id.ToString()
                     });
             }
+
+            model.statusList = Enum.GetValues(typeof(SD.ProjectStatus)).Cast<SD.ProjectStatus>()
+                .Select(i => new SelectListItem
+                {
+                    Text = i.ToString(),   
+                    Value = i.ToString()
+            });
         }
 
         private async Task PopulateLookups(ProjectDeleteVM model)
