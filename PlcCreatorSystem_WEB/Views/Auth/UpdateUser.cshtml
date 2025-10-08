@@ -1,4 +1,5 @@
-﻿@model PlcCreatorSystem_WEB.Models.Dto.UserUpdateDTO
+﻿@using static PlcCreatorSystem_Utility.SD;
+@model PlcCreatorSystem_WEB.Models.VM.UserUpdateVM
 
 <form asp-action="UpdateUser">
     <br />
@@ -6,40 +7,42 @@
         <h1 class="text-primaey">Update User</h1>
         <hr />
 
-        <input hidden asp-for="Id" />
+        <input hidden asp-for="userVM.Id" />
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-dnager"></div>
 
             <div class="col-2">
-                <label asp-for="UserName" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="userVM.UserName" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+                <input asp-for="userVM.UserName" class="form-control" />
+                <span asp-validation-for="userVM.UserName" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="userVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="userVM.Name" class="form-control" />
+                <span asp-validation-for="userVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Password" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="userVM.Password" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <input asp-for="userVM.Password" class="form-control" />
+                <span asp-validation-for="userVM.Password" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Role" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="userVM.Role" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
-            <div class="col-10  pb-3">
-                <textarea asp-for="Role" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Role" class="text-danger"></span>
+            <div class="col-10 pb-3">
+                <select asp-for="userVM.Role" class="form-select" asp-items="@Model.RoleOptions">
+                    <option disabled selected>-- Select Role --</option>
+                </select>
+                <span asp-validation-for="userVM.Role" class="text-danger"></span>
             </div>
 
             <div class="col-5 offset-2">

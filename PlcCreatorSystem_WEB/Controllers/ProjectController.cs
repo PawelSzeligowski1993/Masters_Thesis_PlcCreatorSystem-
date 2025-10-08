@@ -74,7 +74,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                     }
                 }
             }
-            await PopulateLookups(model); 
+            await PopulateLookups(model);
             return View(model);
         }
 
@@ -92,7 +92,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                 await PopulateLookups(projectVM);
                 return View(projectVM);
             }
-            
+
             return NotFound();
         }
 
@@ -215,9 +215,9 @@ namespace PlcCreatorSystem_WEB.Controllers
             model.statusList = Enum.GetValues(typeof(SD.ProjectStatus)).Cast<SD.ProjectStatus>()
                 .Select(i => new SelectListItem
                 {
-                    Text = i.ToString(),   
+                    Text = i.ToString(),
                     Value = i.ToString()
-            });
+                });
         }
 
         private async Task PopulateLookups(ProjectDeleteVM model)

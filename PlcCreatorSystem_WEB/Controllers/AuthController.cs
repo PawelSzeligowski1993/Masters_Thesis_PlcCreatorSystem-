@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
+using PlcCreatorSystem_WEB.Models.VM;
 using PlcCreatorSystem_WEB.Services;
 using PlcCreatorSystem_WEB.Services.IServices;
 using System.Security.Claims;
@@ -24,7 +26,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         //    _authService = authService;
         //}
 
-        public AuthController(IAuthService authService,IUserService userService, IMapper mapper)
+        public AuthController(IAuthService authService, IUserService userService, IMapper mapper)
         {
             _authService = authService;
             _userService = userService;
@@ -43,7 +45,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
         {
             APIResponse response = await _authService.LoginAsync<APIResponse>(loginRequestDTO);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 LoginResponseDTO loginResponseDTO = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
 
@@ -62,12 +64,12 @@ namespace PlcCreatorSystem_WEB.Controllers
                 ModelState.AddModelError("CustomError", response.ErrorsMessages.FirstOrDefault());
                 return View(loginRequestDTO);
             }
-            
+
         }
 
         [HttpGet]
-        public IActionResult Register() 
-        { 
+        public IActionResult Register()
+        {
             return View();
         }
 
@@ -86,7 +88,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult AccessDenied() 
+        public IActionResult AccessDenied()
         {
             return View();
         }
@@ -110,11 +112,15 @@ namespace PlcCreatorSystem_WEB.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser(int userId)
         {
+            UserUpdateVM userUpdateVM = new ();
             var response = await _userService.GetAsync<APIResponse>(userId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
-                UserDTO model = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
-                return View(_mapper.Map<UserUpdateDTO>(model));
+                UserDTO? model = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
+                userUpdateVM.userVM = _mapper.Map<UserUpdateDTO>(model);
+                //return View(_mapper.Map<UserUpdateDTO>(model));
+                await PopulateLookups(userUpdateVM);
+                return View(userUpdateVM);
             }
             return NotFound();
         }
@@ -122,19 +128,21 @@ namespace PlcCreatorSystem_WEB.Controllers
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateUser(UserUpdateDTO model)
+        public async Task<IActionResult> UpdateUser(UserUpdateVM model)
         {
 
             if (ModelState.IsValid)
             {
                 TempData["success"] = "User updated successfully";
-                var response = await _userService.UpdateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _userService.UpdateAsync<APIResponse>(model.userVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
+                    TempData["success"] = "User updated successfully";
                     return RedirectToAction(nameof(IndexUser));
                 }
+                TempData["error"] = "Error encountered.";
             }
-            TempData["error"] = "Error encountered.";
+            await PopulateLookups(model);
             return View(model);
         }
 
@@ -164,6 +172,18 @@ namespace PlcCreatorSystem_WEB.Controllers
             }
             TempData["error"] = "Error encountered.";
             return View(model);
+        }
+
+        // Methods
+        private async Task PopulateLookups(UserUpdateVM model)
+        {
+            model.RoleOptions = Enum.GetNames(typeof(SD.Role))
+                .Select(i => new SelectListItem
+                {
+                    Value = i,
+                    Text = i,
+                    Selected = string.Equals(i, model.userVM.Role, StringComparison.OrdinalIgnoreCase)
+                });
         }
     }
 }

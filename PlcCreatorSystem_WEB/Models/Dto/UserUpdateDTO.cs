@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using static PlcCreatorSystem_Utility.SD;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlcCreatorSystem_WEB.Models.Dto
 {
@@ -16,5 +18,6 @@ namespace PlcCreatorSystem_WEB.Models.Dto
         public string Password { get; set; }
         [Required]
         public string Role { get; set; }
+        
     }
 }

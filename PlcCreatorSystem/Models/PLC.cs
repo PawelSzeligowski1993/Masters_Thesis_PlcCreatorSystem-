@@ -21,9 +21,10 @@ namespace PlcCreatorSystem_API.Models
         [Required]
         public string Identyfier { get; set; }
         public string Details { get; set; }
-        //[ForeignKey("Author")]
-        //public int AuthorID { get; set; }
-        //public Author Author { get; set; }
+        [Required]
+        [ForeignKey("LocalUser")]
+        public int UserID { get; set; }
+        public LocalUser LocalUser { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }

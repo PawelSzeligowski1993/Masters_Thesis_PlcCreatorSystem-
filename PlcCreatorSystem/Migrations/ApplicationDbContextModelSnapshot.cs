@@ -22,35 +22,6 @@ namespace PlcCreatorSystem_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MagicVilla_Villa_API.Models.LocalUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LocalUsers");
-                });
-
             modelBuilder.Entity("PlcCreatorSystem_API.Models.HMI", b =>
                 {
                     b.Property<int>("Id")
@@ -81,7 +52,12 @@ namespace PlcCreatorSystem_API.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("HMIs");
 
@@ -89,32 +65,98 @@ namespace PlcCreatorSystem_API.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6850),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4576),
                             Details = "HMI1 - TEST",
                             IP = "10.101.10.100",
                             Identyfier = "6AV2 124-0UC02-0AX0/17.0.0.0",
                             Name = "HMI1",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4578),
+                            UserID = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6854),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4582),
                             Details = "HMI2 - TEST",
                             IP = "10.102.10.100",
                             Identyfier = "6AV2 124-0UC02-0AX0/17.0.0.0",
                             Name = "HMI2",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4583),
+                            UserID = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6857),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4585),
                             Details = "HMI3 - TEST, fill database HMI3, and Project3",
                             IP = "10.103.10.100",
                             Identyfier = "6AV2 124-0UC02-0AX0/17.0.0.0",
                             Name = "HMI3",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4587),
+                            UserID = 1
+                        });
+                });
+
+            modelBuilder.Entity("PlcCreatorSystem_API.Models.LocalUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LocalUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Pawel",
+                            Password = "Pawel123",
+                            Role = "admin",
+                            UserName = "PawelAdmin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Jan",
+                            Password = "Jan123",
+                            Role = "admin",
+                            UserName = "JanAdmin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Adam",
+                            Password = "Adam123",
+                            Role = "engineer",
+                            UserName = "AdamEngineer"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Robert",
+                            Password = "Robert123",
+                            Role = "custom",
+                            UserName = "RobertCustom"
                         });
                 });
 
@@ -160,7 +202,12 @@ namespace PlcCreatorSystem_API.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("PLCs");
 
@@ -168,7 +215,7 @@ namespace PlcCreatorSystem_API.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6661),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4498),
                             Details = "PLC1 - This is TEST",
                             IP_X1 = "10.101.10.11",
                             IP_X2 = "10.100.10.10",
@@ -176,12 +223,13 @@ namespace PlcCreatorSystem_API.Migrations
                             Name = "PLC1",
                             Subnet_X1 = "Network1_PLC1",
                             Subnet_X2 = "Network2_PLC1",
-                            UpdatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6706)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4545),
+                            UserID = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6709),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4550),
                             Details = "PLC2 - This is TEST",
                             IP_X1 = "10.102.10.21",
                             IP_X2 = "10.100.10.20",
@@ -189,12 +237,13 @@ namespace PlcCreatorSystem_API.Migrations
                             Name = "PLC2",
                             Subnet_X1 = "Network1_PLC2",
                             Subnet_X2 = "Network2_PLC2",
-                            UpdatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6711)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4551),
+                            UserID = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6713),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4554),
                             Details = "PLC3 - This is TEST, fill database PLC3, and Project3",
                             IP_X1 = "10.103.10.31",
                             IP_X2 = "10.100.10.30",
@@ -202,7 +251,8 @@ namespace PlcCreatorSystem_API.Migrations
                             Name = "PLC3",
                             Subnet_X1 = "Network1_PLC3",
                             Subnet_X2 = "Network2_PLC3",
-                            UpdatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6715)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4556),
+                            UserID = 1
                         });
                 });
 
@@ -238,11 +288,16 @@ namespace PlcCreatorSystem_API.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HmiID");
 
                     b.HasIndex("PlcID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Projects");
 
@@ -250,14 +305,37 @@ namespace PlcCreatorSystem_API.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6877),
+                            CreatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4602),
                             CustomerDetails = "Firma Krzak",
                             HmiID = 3,
                             Name = "Project1",
                             PlcID = 3,
                             Status = 3,
-                            UpdatedDate = new DateTime(2025, 10, 3, 14, 12, 46, 262, DateTimeKind.Local).AddTicks(6879)
+                            UpdatedDate = new DateTime(2025, 10, 8, 10, 39, 40, 449, DateTimeKind.Local).AddTicks(4604),
+                            UserID = 1
                         });
+                });
+
+            modelBuilder.Entity("PlcCreatorSystem_API.Models.HMI", b =>
+                {
+                    b.HasOne("PlcCreatorSystem_API.Models.LocalUser", "LocalUser")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LocalUser");
+                });
+
+            modelBuilder.Entity("PlcCreatorSystem_API.Models.PLC", b =>
+                {
+                    b.HasOne("PlcCreatorSystem_API.Models.LocalUser", "LocalUser")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LocalUser");
                 });
 
             modelBuilder.Entity("PlcCreatorSystem_API.Models.Project", b =>
@@ -274,7 +352,15 @@ namespace PlcCreatorSystem_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PlcCreatorSystem_API.Models.LocalUser", "LocalUser")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("HMI");
+
+                    b.Navigation("LocalUser");
 
                     b.Navigation("PLC");
                 });

@@ -23,6 +23,7 @@ namespace PlcCreatorSystem_API.Models.Dto
         [MaxLength(30)]
         public string Identyfier { get; set; }
         public string Details { get; set; }
-        //public Author Author { get; set; }
+        [Required]
+        public int UserID { get; set; }
     }
 }

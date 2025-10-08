@@ -23,9 +23,10 @@ namespace PlcCreatorSystem_API.Models
         public string CustomerDetails { get; set; }
         [Required]
         public ProjectStatus Status { get; set; }  // enum
-        //[ForeignKey("Author")]
-        //public int AuthorID { get; set; }
-        //public Author Author { get; set; }
+        [Required]
+        [ForeignKey("LocalUser")]
+        public int UserID { get; set; }
+        public LocalUser LocalUser { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }

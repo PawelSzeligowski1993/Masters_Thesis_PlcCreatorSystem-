@@ -33,7 +33,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(list);
         }
 
-        [Authorize(Roles= "admin,engineer")]
+        [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> CreateHmi()
         {
             return View();

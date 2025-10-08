@@ -22,6 +22,9 @@ namespace PlcCreatorSystem_API.Models.Dto
         public string CustomerDetails { get; set; }
         [Required]
         public ProjectStatus Status { get; set; }  // enum
-        //public Author Author { get; set; }
+        [Required]
+        public int UserID { get; set; }
+        [Required]
+        public LocalUser LocalUser { get; set; }
     }
 }
