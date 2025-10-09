@@ -12,10 +12,12 @@ namespace PlcCreatorSystem_WEB.Models.VM
         }
         public ProjectCreateDTO project { get; set; }
         [ValidateNever]
-        public IEnumerable<SelectListItem> plcList { get; set; } = Enumerable.Empty<SelectListItem>();
+        public IEnumerable<SelectListItem> plcList { get; set; }
         [ValidateNever]
-        public IEnumerable<SelectListItem> hmiList { get; set; } = Enumerable.Empty<SelectListItem>();
+        public IEnumerable<SelectListItem> hmiList { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> statusList { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem> usersList { get; set; }
     }
 }

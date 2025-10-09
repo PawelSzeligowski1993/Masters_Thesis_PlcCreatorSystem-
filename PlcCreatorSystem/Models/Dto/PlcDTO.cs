@@ -27,7 +27,6 @@ namespace PlcCreatorSystem_API.Models.Dto
         public string Details { get; set; }
         [Required]
         public int UserID { get; set; }
-        [Required]
-        public LocalUser LocalUser { get; set; }
+        public UserDTO LocalUser { get; set; }
     }
 }

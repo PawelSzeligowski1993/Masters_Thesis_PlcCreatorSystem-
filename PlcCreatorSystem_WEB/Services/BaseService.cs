@@ -4,6 +4,8 @@ using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Services.IServices;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using static System.Net.WebRequestMethods;
 
 namespace PlcCreatorSystem_WEB.Services
 {
@@ -96,6 +98,10 @@ namespace PlcCreatorSystem_WEB.Services
                 var APIResponse = JsonConvert.DeserializeObject<T>(res);
                 return APIResponse;
             }
+
+
         }
+
+
     }
 }

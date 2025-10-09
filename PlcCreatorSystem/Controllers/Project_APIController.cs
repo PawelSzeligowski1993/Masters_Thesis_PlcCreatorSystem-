@@ -18,14 +18,16 @@ namespace PlcCreatorSystem_API.Controllers
         private readonly IPLCRepository _dbPLC;
         private readonly IHMIRepository _dbHMI;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _dbUSER;
 
-        public Project_APIController(IProjectRepository dbProject, IMapper mapper, IPLCRepository dbPLC, IHMIRepository dbHMI)
+        public Project_APIController(IProjectRepository dbProject, IMapper mapper, IPLCRepository dbPLC, IHMIRepository dbHMI, IUserRepository dbUSER)
         {
             _dbProject = dbProject;
             _mapper = mapper;
             this._response = new();
             _dbPLC = dbPLC;
             _dbHMI = dbHMI;
+            _dbUSER = dbUSER;
         }
 
         [Authorize(Roles = "admin,engineer,custom")]
@@ -35,7 +37,7 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
-                IEnumerable<Project> projectList = await _dbProject.GetAllAsync(includeProperties: "PLC,HMI");
+                IEnumerable<Project> projectList = await _dbProject.GetAllAsync(includeProperties: "PLC,HMI,LocalUser");
                 _response.Result = _mapper.Map<List<ProjectDTO>>(projectList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -65,7 +67,7 @@ namespace PlcCreatorSystem_API.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var project = await _dbProject.GetAsync(x => x.Id == id, includeProperties: "PLC,HMI");
+                var project = await _dbProject.GetAsync(x => x.Id == id, includeProperties: "PLC,HMI,LocalUser");
                 if (project == null)
                 {
                     return NotFound();
@@ -114,6 +116,14 @@ namespace PlcCreatorSystem_API.Controllers
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorsMessages = new List<string> { "HMI ID is invalid!" };
+                    return BadRequest(_response);
+                }
+
+                if (await _dbUSER.GetAsync(u => u.Id == createDTO.UserID) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "USER ID is invalid!" };
                     return BadRequest(_response);
                 }
 
@@ -190,6 +200,11 @@ namespace PlcCreatorSystem_API.Controllers
                 if (await _dbProject.GetAsync(u => u.HmiID == updateDTO.HmiID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "HMI ID is Invalid!");
+                    return BadRequest(ModelState);
+                }
+                if (await _dbPLC.GetAsync(u => u.UserID == updateDTO.UserID) == null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
                     return BadRequest(ModelState);
                 }
                 Project model = _mapper.Map<Project>(updateDTO);

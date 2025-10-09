@@ -17,5 +17,7 @@ namespace PlcCreatorSystem_WEB.Models.VM
         public IEnumerable<SelectListItem> hmiList { get; set; } = Enumerable.Empty<SelectListItem>();
         [ValidateNever]
         public IEnumerable<SelectListItem> statusList { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem> usersList { get; set; } = Enumerable.Empty<SelectListItem>();
     }
 }

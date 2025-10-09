@@ -17,12 +17,14 @@ namespace PlcCreatorSystem_API.Controllers
         protected APIResponse _response;
         private readonly IPLCRepository _dbPLC;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _dbUSER;
 
-        public PLC_APIController(IPLCRepository dbPLC, IMapper mapper)
+        public PLC_APIController(IPLCRepository dbPLC, IMapper mapper, IUserRepository dbUSER)
         {
             _dbPLC = dbPLC;
             _mapper = mapper;
             this._response = new();
+            _dbUSER = dbUSER;
         }
 
         [Authorize(Roles = "admin,engineer,custom")]
@@ -32,7 +34,7 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
-                IEnumerable<PLC> pLCList = await _dbPLC.GetAllAsync();
+                IEnumerable<PLC> pLCList = await _dbPLC.GetAllAsync(includeProperties: "LocalUser");
                 _response.Result = _mapper.Map<List<PlcDTO>>(pLCList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -62,7 +64,7 @@ namespace PlcCreatorSystem_API.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var plc = await _dbPLC.GetAsync(x => x.Id == id);
+                var plc = await _dbPLC.GetAsync(x => x.Id == id, includeProperties: "LocalUser");
                 if (plc == null)
                 {
                     return NotFound();
@@ -93,8 +95,18 @@ namespace PlcCreatorSystem_API.Controllers
             {
                 if (await _dbPLC.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     ModelState.AddModelError("ErrorMessages", "Plc already Exist!");
                     return BadRequest(ModelState);
+                }
+
+                if (await _dbUSER.GetAsync(u => u.Id == createDTO.UserID) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "USER ID is invalid!" };
+                    return BadRequest(_response);
                 }
 
                 if (createDTO == null)
@@ -163,6 +175,12 @@ namespace PlcCreatorSystem_API.Controllers
                     return BadRequest();
                 }
 
+                if (await _dbPLC.GetAsync(u => u.UserID == updateDTO.UserID) == null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
+                    return BadRequest(ModelState);
+                }
+
                 PLC model = _mapper.Map<PLC>(updateDTO);
 
                 await _dbPLC.UpdateAsync(model);
@@ -179,35 +197,35 @@ namespace PlcCreatorSystem_API.Controllers
             return _response;
         }
 
-        [Authorize(Roles = "admin,engineer")]
-        [HttpPatch("{id:int}", Name = "UpdatePartialPLC")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdatePartialPLC(int id, JsonPatchDocument<PlcUpdateDTO> patchDTO)
-        {
-            if (patchDTO == null || id == 0)
-            { return BadRequest(); }
+        //[Authorize(Roles = "admin,engineer")]
+        //[HttpPatch("{id:int}", Name = "UpdatePartialPLC")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> UpdatePartialPLC(int id, JsonPatchDocument<PlcUpdateDTO> patchDTO)
+        //{
+        //    if (patchDTO == null || id == 0)
+        //    { return BadRequest(); }
 
-            var plc = await _dbPLC.GetAsync(u => u.Id == id, tracked: false);
+        //    var plc = await _dbPLC.GetAsync(u => u.Id == id, tracked: false);
 
-            PlcUpdateDTO plcDTO = _mapper.Map<PlcUpdateDTO>(plc);
-
-
-            if (plc == null)
-            {
-                return BadRequest();
-            }
-            patchDTO.ApplyTo(plcDTO, ModelState);
-            PLC model = _mapper.Map<PLC>(plcDTO);
+        //    PlcUpdateDTO plcDTO = _mapper.Map<PlcUpdateDTO>(plc);
 
 
-            await _dbPLC.UpdateAsync(model);
+        //    if (plc == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    patchDTO.ApplyTo(plcDTO, ModelState);
+        //    PLC model = _mapper.Map<PLC>(plcDTO);
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            return NoContent();
-        }
+
+        //    await _dbPLC.UpdateAsync(model);
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    return NoContent();
+        //}
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlcCreatorSystem_API.Models;
@@ -16,12 +17,14 @@ namespace PlcCreatorSystem_API.Controllers
         protected APIResponse _response;
         private readonly IHMIRepository _dbHMI;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _dbUSER;
 
-        public HMI_APIController(IHMIRepository dbHMI, IMapper mapper)
+        public HMI_APIController(IHMIRepository dbHMI, IMapper mapper, IUserRepository dbUSER)
         {
             _dbHMI = dbHMI;
             _mapper = mapper;
             this._response = new();
+            _dbUSER = dbUSER;
         }
         [Authorize(Roles = "admin,engineer,custom")]
         [HttpGet]
@@ -30,7 +33,7 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
-                IEnumerable<HMI> hmiList = await _dbHMI.GetAllAsync();
+                IEnumerable<HMI> hmiList = await _dbHMI.GetAllAsync(includeProperties: "LocalUser");
                 _response.Result = _mapper.Map<List<HmiDTO>>(hmiList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -62,7 +65,7 @@ namespace PlcCreatorSystem_API.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var project = await _dbHMI.GetAsync(x => x.Id == id);
+                var project = await _dbHMI.GetAsync(x => x.Id == id, includeProperties: "LocalUser");
                 if (project == null)
                 {
                     return NotFound();
@@ -93,10 +96,27 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
+                if (createDTO == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "Payload cannot be null." };
+                    return BadRequest(_response);
+                }
                 if (await _dbHMI.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     ModelState.AddModelError("ErrorMessages", "HMI already Exist!");
                     return BadRequest(ModelState);
+                }
+
+                if (await _dbUSER.GetAsync(u => u.Id == createDTO.UserID) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "USER ID is invalid!" };
+                    return BadRequest(_response);
                 }
 
                 if (createDTO == null)
@@ -160,13 +180,33 @@ namespace PlcCreatorSystem_API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateHMI(int id, [FromBody] HmiDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateHMI(int id, [FromBody] HmiUpdateDTO updateDTO)
         {
             try
             {
+                if (updateDTO == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "Payload cannot be null." };
+                    return BadRequest(_response);
+                }
+                if (await _dbUSER.GetAsync(u => u.Id == updateDTO.UserID) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "USER ID is invalid!" };
+                    return BadRequest(_response);
+                }
+
                 if (updateDTO == null || id != updateDTO.Id)
                 {
                     return BadRequest();
+                }
+                if (await _dbUSER.GetAsync(u => u.Id == updateDTO.UserID) == null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
+                    return BadRequest(ModelState);
                 }
 
                 HMI model = _mapper.Map<HMI>(updateDTO);
@@ -183,39 +223,6 @@ namespace PlcCreatorSystem_API.Controllers
                     = new List<string>() { ex.ToString() };
             }
             return _response;
-        }
-
-        [Authorize(Roles = "admin,engineer")]
-        [HttpPatch("{id:int}", Name = "UpdatePartialHMI")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdatePartialHMI(int id, JsonPatchDocument<HmiUpdateDTO> patchDTO)
-        {
-            if (patchDTO == null || id == 0)
-            { return BadRequest(); }
-
-            var hmi = await _dbHMI.GetAsync(u => u.Id == id, tracked: false);
-
-            HmiUpdateDTO hmiDTO = _mapper.Map<HmiUpdateDTO>(hmi);
-
-
-            if (hmi == null)
-            {
-                return BadRequest();
-            }
-            patchDTO.ApplyTo(hmiDTO, ModelState);
-            HMI model = _mapper.Map<HMI>(hmiDTO);
-
-
-            await _dbHMI.UpdateAsync(model);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            return NoContent();
         }
     }
 }

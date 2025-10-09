@@ -12,11 +12,9 @@ namespace PlcCreatorSystem_API.Models.Dto
         public string Name { get; set; }
         [Required]
         public int PlcID { get; set; }
-        [Required]
         public PlcDTO PLC { get; set; }
         [Required]
         public int HmiID { get; set; }
-        [Required]
         public HmiDTO HMI { get; set; }
         [Required]
         public string CustomerDetails { get; set; }
@@ -24,7 +22,6 @@ namespace PlcCreatorSystem_API.Models.Dto
         public ProjectStatus Status { get; set; }  // enum
         [Required]
         public int UserID { get; set; }
-        [Required]
-        public LocalUser LocalUser { get; set; }
+        public UserDTO LocalUser { get; set; }
     }
 }

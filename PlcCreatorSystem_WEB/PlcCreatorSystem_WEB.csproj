@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PlcCreatorSystem\PlcCreatorSystem_API.csproj" />
     <ProjectReference Include="..\PlcCreatorSystem_Utility\PlcCreatorSystem_Utility.csproj" />
   </ItemGroup>
 

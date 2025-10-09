@@ -6,7 +6,7 @@ namespace PlcCreatorSystem_WEB.Models
     {
         public HttpStatusCode StatusCode { get; set; }
         public bool IsSuccess { get; set; } = true;
-        public List<string>? ErrorsMessages { get; set; }
+        public List<string>? ErrorsMessages { get; set; } = new();
         public object? Result { get; set; }
     }
 }
