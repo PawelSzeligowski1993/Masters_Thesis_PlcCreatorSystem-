@@ -58,7 +58,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                 var response = await _hmiService.CreateAsync<APIResponse>(model.hmicreateVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
-
+                    TempData["success"] = "Plc created successfully";
                     return RedirectToAction(nameof(IndexHmi));
                 }
                 else
@@ -82,7 +82,6 @@ namespace PlcCreatorSystem_WEB.Controllers
             {
                 HmiDTO? model = JsonConvert.DeserializeObject<HmiDTO>(Convert.ToString(response.Result));
                 hmiVM.hmiUpdateVM = _mapper.Map<HmiUpdateDTO>(model);
-                //return View(_mapper.Map<HmiUpdateDTO>(model));
                 await PopulateLookups(hmiVM);
                 return View(hmiVM);
             }
@@ -99,20 +98,16 @@ namespace PlcCreatorSystem_WEB.Controllers
             {
                 var response = await _hmiService.UpdateAsync<APIResponse>(model.hmiUpdateVM, HttpContext.Session.GetString(SD.SessionToken));
                 TempData["success"] = "Hmi updated successfully";
-                //var response = await _hmiService.UpdateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexHmi));
                 }
                 else
                 {
-                    var err = 
-                        response?.ErrorsMessages?.FirstOrDefault()
-                        ?? (response?.StatusCode == System.Net.HttpStatusCode.BadRequest
-                            ? "Bad request while updating HMI."
-                            : "Unexpected error while updating HMI.");
-
-                    ModelState.AddModelError(string.Empty, err);
+                    if (response.ErrorsMessages.Count > 0)
+                    {
+                        ModelState.AddModelError("ErrorMessages", response.ErrorsMessages.FirstOrDefault());
+                    }
                 }
             }
             await PopulateLookups(model);
@@ -122,16 +117,16 @@ namespace PlcCreatorSystem_WEB.Controllers
         [Authorize(Roles = "admin,engineer")]
         public async Task<IActionResult> DeleteHmi(int hmiId)
         {
-            HmiDeleteVM hmitVM = new();
+            HmiDeleteVM hmiVM = new();
             var response = await _hmiService.GetAsync<APIResponse>(hmiId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 HmiDTO model = JsonConvert.DeserializeObject<HmiDTO>(Convert.ToString(response.Result));
-                hmitVM.hmiDeleteVM = model;
+                hmiVM.hmiDeleteVM = model;
 
-                await PopulateLookups(hmitVM);
+                await PopulateLookups(hmiVM);
 
-                return View(hmitVM);
+                return View(hmiVM);
             }
             return NotFound();
         }
@@ -147,11 +142,20 @@ namespace PlcCreatorSystem_WEB.Controllers
                 TempData["success"] = "HMI deleted successfully";
                 return RedirectToAction(nameof(IndexHmi));
             }
+            else
+            {
+                if (response.ErrorsMessages.Count > 0)
+                {
+                    ModelState.AddModelError("ErrorMessages", response.ErrorsMessages.FirstOrDefault());
+                }
+            }
             await PopulateLookups(model);
             return View(model);
         }
 
-        //Methods
+        //************************************************************************************************
+        //****************************** Methods - PopulateLookups ***************************************
+        //************************************************************************************************
         //HmiCreateVM
         private async Task PopulateLookups(HmiCreateVM model)
         {

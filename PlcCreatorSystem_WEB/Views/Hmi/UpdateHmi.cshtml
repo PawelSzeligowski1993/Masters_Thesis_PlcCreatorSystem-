@@ -6,17 +6,9 @@
         <h1 class="text-primaey">Update Hmi</h1>
         <hr />
 
-        
+        <input hidden asp-for="hmiUpdateVM.Id" />
         <div class="row">
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-            <div class="col-2">
-                <label asp-for="hmiUpdateVM.Id" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="hmiUpdateVM.Id" class="form-control" />
-                <span asp-validation-for="hmiUpdateVM.Id" class="text-danger"></span>
-            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-2">
                 <label asp-for="hmiUpdateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>

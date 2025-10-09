@@ -1,4 +1,4 @@
-﻿@model PlcCreatorSystem_WEB.Models.Dto.PlcUpdateDTO
+﻿@model PlcCreatorSystem_WEB.Models.VM.PlcUpdateVM
 
 <form asp-action="UpdatePlc">
     <br />
@@ -6,64 +6,74 @@
         <h1 class="text-primaey">Update Plc</h1>
         <hr />
 
-        <input hidden asp-for="Id" />
+        <input hidden asp-for="plcUpdateVM.Id" />
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-dnager"></div>
 
             <div class="col-2">
-                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="plcUpdateVM.Name" class="form-control" />
+                <span asp-validation-for="plcUpdateVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Subnet_X1" class="form-control" />
-                <span asp-validation-for="Subnet_X1" class="text-danger"></span>
+                <input asp-for="plcUpdateVM.Subnet_X1" class="form-control" />
+                <span asp-validation-for="plcUpdateVM.Subnet_X1" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP_X1" class="form-control" />
-                <span asp-validation-for="IP_X1" class="text-danger"></span>
+                <input asp-for="plcUpdateVM.IP_X1" class="form-control" />
+                <span asp-validation-for="plcUpdateVM.IP_X1" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Subnet_X2" class="form-control" />
-                <span asp-validation-for="Subnet_X2" class="text-danger"></span>
+                <input asp-for="plcUpdateVM.Subnet_X2" class="form-control" />
+                <span asp-validation-for="plcUpdateVM.Subnet_X2" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP_X2" class="form-control" />
-                <span asp-validation-for="IP_X2" class="text-danger"></span>
+                <input asp-for="plcUpdateVM.IP_X2" class="form-control" />
+                <span asp-validation-for="plcUpdateVM.IP_X2" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Identyfier" class="form-control" />
-                <span asp-validation-for="Identyfier" class="text-danger"></span>
+                <input asp-for="plcUpdateVM.Identyfier" class="form-control" />
+                <span asp-validation-for="plcUpdateVM.Identyfier" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Details" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcUpdateVM.Details" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10  pb-3">
-                <textarea asp-for="Details" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Details" class="text-danger"></span>
+                <textarea asp-for="plcUpdateVM.Details" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="plcUpdateVM.Details" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="plcUpdateVM.UserID" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <select asp-for="plcUpdateVM.UserID" class="form-select" asp-items="@Model.usersList">
+                    <option disabled selected>--Select User--</option>
+                </select>
+                <span asp-validation-for="plcUpdateVM.UserID" class="text-danger"></span>
             </div>
 
             <div class="col-5 offset-2">

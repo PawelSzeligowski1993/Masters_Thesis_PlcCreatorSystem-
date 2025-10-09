@@ -52,6 +52,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpGet("{id:int}", Name = "GetPLC")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(PlcDTO), 200)]
@@ -86,6 +88,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -93,6 +97,13 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
+                if (createDTO == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "Payload cannot be null." };
+                    return BadRequest(_response);
+                }
                 if (await _dbPLC.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
                     _response.IsSuccess = false;
@@ -133,6 +144,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpDelete("{id:int}", Name = "DeletePLC")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> DeletePLC(int id)
@@ -166,16 +179,23 @@ namespace PlcCreatorSystem_API.Controllers
         [HttpPut("{id:int}", Name = "UpdatePlc")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdatePLC(int id, [FromBody] PlcDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdatePLC(int id, [FromBody] PlcUpdateDTO updateDTO)
         {
             try
             {
+                if (await _dbUSER.GetAsync(u => u.Id == updateDTO.UserID) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "USER ID is invalid!" };
+                    return BadRequest(_response);
+                }
                 if (updateDTO == null || id != updateDTO.Id)
                 {
                     return BadRequest();
                 }
 
-                if (await _dbPLC.GetAsync(u => u.UserID == updateDTO.UserID) == null)
+                if (await _dbPLC.GetAsync(u => u.Id == updateDTO.UserID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
                     return BadRequest(ModelState);
@@ -196,36 +216,5 @@ namespace PlcCreatorSystem_API.Controllers
             }
             return _response;
         }
-
-        //[Authorize(Roles = "admin,engineer")]
-        //[HttpPatch("{id:int}", Name = "UpdatePartialPLC")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<IActionResult> UpdatePartialPLC(int id, JsonPatchDocument<PlcUpdateDTO> patchDTO)
-        //{
-        //    if (patchDTO == null || id == 0)
-        //    { return BadRequest(); }
-
-        //    var plc = await _dbPLC.GetAsync(u => u.Id == id, tracked: false);
-
-        //    PlcUpdateDTO plcDTO = _mapper.Map<PlcUpdateDTO>(plc);
-
-
-        //    if (plc == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    patchDTO.ApplyTo(plcDTO, ModelState);
-        //    PLC model = _mapper.Map<PLC>(plcDTO);
-
-
-        //    await _dbPLC.UpdateAsync(model);
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return NoContent();
-        //}
     }
 }

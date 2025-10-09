@@ -55,6 +55,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpGet("{id:int}", Name = "GetProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProjectDTO), 200)]
@@ -88,6 +90,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -95,6 +99,13 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
+                if (createDTO == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorsMessages = new List<string> { "Payload cannot be null." };
+                    return BadRequest(_response);
+                }
                 if (await _dbProject.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
                     _response.IsSuccess = false;
@@ -151,6 +162,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpDelete("{id:int}", Name = "DeleteProject")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)] 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> DeleteProject(int id)
@@ -183,6 +196,8 @@ namespace PlcCreatorSystem_API.Controllers
         [Authorize(Roles = "admin,engineer")]
         [HttpPut("{id:int}", Name = "UpdateProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> UpdateProject(int id, [FromBody] ProjectUpdateDTO updateDTO)
         {
@@ -192,17 +207,17 @@ namespace PlcCreatorSystem_API.Controllers
                 {
                     return BadRequest();
                 }
-                if (await _dbProject.GetAsync(u => u.PlcID == updateDTO.PlcID) == null)
+                if (await _dbProject.GetAsync(u => u.Id == updateDTO.PlcID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "PLC ID is Invalid!");
                     return BadRequest(ModelState);
                 }
-                if (await _dbProject.GetAsync(u => u.HmiID == updateDTO.HmiID) == null)
+                if (await _dbProject.GetAsync(u => u.Id == updateDTO.HmiID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "HMI ID is Invalid!");
                     return BadRequest(ModelState);
                 }
-                if (await _dbPLC.GetAsync(u => u.UserID == updateDTO.UserID) == null)
+                if (await _dbPLC.GetAsync(u => u.Id == updateDTO.UserID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
                     return BadRequest(ModelState);
@@ -222,35 +237,5 @@ namespace PlcCreatorSystem_API.Controllers
             }
             return _response;
         }
-
-        //[HttpPatch("{id:int}", Name = "UpdatePartialProject")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<IActionResult> UpdatePartialProject(int id, JsonPatchDocument<ProjectUpdateDTO> patchDTO)
-        //{
-        //    if (patchDTO == null || id == 0)
-        //    { return BadRequest(); }
-
-        //    var project = await _dbProject.GetAsync(u => u.Id == id, tracked: false);
-
-        //    ProjectUpdateDTO projectDTO = _mapper.Map<ProjectUpdateDTO>(project);
-
-
-        //    if (project == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    patchDTO.ApplyTo(projectDTO, ModelState);
-        //    Project model = _mapper.Map<Project>(projectDTO);
-
-
-        //    await _dbProject.UpdateAsync(model);
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return NoContent();
-        //}
     }
 }

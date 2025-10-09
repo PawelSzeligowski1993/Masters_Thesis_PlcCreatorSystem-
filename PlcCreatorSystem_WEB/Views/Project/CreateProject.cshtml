@@ -15,39 +15,39 @@
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="col-2">
-                <label asp-for="project.Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="project.Name" class="form-control" />
-                <span asp-validation-for="project.Name" class="text-danger"></span>
+                <input asp-for="projectVM.Name" class="form-control" />
+                <span asp-validation-for="projectVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="project.PlcID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectVM.PlcID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="project.PlcID" class="form-select" asp-items="@Model.plcList">
+                <select asp-for="projectVM.PlcID" class="form-select" asp-items="@Model.plcList">
                     <option disabled selected>--Select PLC--</option>
                 </select>
-                <span asp-validation-for="project.PlcID" class="text-danger"></span>
+                <span asp-validation-for="projectVM.PlcID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="project.HmiID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectVM.HmiID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="project.HmiID" class="form-select" asp-items="@Model.hmiList">
+                <select asp-for="projectVM.HmiID" class="form-select" asp-items="@Model.hmiList">
                     <option disabled selected>--Select HMI--</option>
                 </select>
-                <span asp-validation-for="project.HmiID" class="text-danger"></span>
+                <span asp-validation-for="projectVM.HmiID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="project.CustomerDetails" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectVM.CustomerDetails" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="project.CustomerDetails" class="form-control" />
-                <span asp-validation-for="project.CustomerDetails" class="text-danger"></span>
+                <input asp-for="projectVM.CustomerDetails" class="form-control" />
+                <span asp-validation-for="projectVM.CustomerDetails" class="text-danger"></span>
             </div>
 
             <div class="col-2">

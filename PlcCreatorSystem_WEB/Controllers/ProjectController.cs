@@ -46,7 +46,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             ProjectCreateVM projectVM = new();
             await PopulateLookups(projectVM);
             //default status = "waiting_to_check"
-            projectVM.project.Status = SD.ProjectStatus.waiting_to_check;
+            projectVM.projectVM.Status = SD.ProjectStatus.waiting_to_check;
             return View(projectVM);
         }
 
@@ -57,11 +57,11 @@ namespace PlcCreatorSystem_WEB.Controllers
         {
             //default status = "waiting_to_check"
             ModelState.Remove("project.Status");
-            model.project.Status = SD.ProjectStatus.waiting_to_check;
+            model.projectVM.Status = SD.ProjectStatus.waiting_to_check;
 
             if (ModelState.IsValid)
             {
-                var response = await _projectService.CreateAsync<APIResponse>(model.project, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _projectService.CreateAsync<APIResponse>(model.projectVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexProject));
@@ -86,7 +86,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             if (response != null && response.IsSuccess)
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
-                projectVM.project = _mapper.Map<ProjectUpdateDTO>(model);
+                projectVM.projectVM = _mapper.Map<ProjectUpdateDTO>(model);
                 //return View(_mapper.Map<ProjectUpdateDTO>(model));
 
                 await PopulateLookups(projectVM);
@@ -104,7 +104,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _projectService.UpdateAsync<APIResponse>(model.project, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _projectService.UpdateAsync<APIResponse>(model.projectVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexProject));
@@ -129,7 +129,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             if (response != null && response.IsSuccess)
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
-                projectVM.project = model;
+                projectVM.projectVM = model;
 
                 await PopulateLookups(projectVM);
                 return View(projectVM);
@@ -143,7 +143,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProject(ProjectDeleteVM model)
         {
-            var response = await _projectService.DeleteAsync<APIResponse>(model.project.Id, HttpContext.Session.GetString(SD.SessionToken));
+            var response = await _projectService.DeleteAsync<APIResponse>(model.projectVM.Id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 return RedirectToAction(nameof(IndexProject));

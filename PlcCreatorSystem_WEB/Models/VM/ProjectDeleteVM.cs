@@ -8,9 +8,9 @@ namespace PlcCreatorSystem_WEB.Models.VM
     {
         public ProjectDeleteVM()
         {
-            project = new ProjectDTO();
+            projectVM = new ProjectDTO();
         }
-        public ProjectDTO project { get; set; }
+        public ProjectDTO projectVM { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> plcList { get; set; }
         [ValidateNever]

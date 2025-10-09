@@ -1,4 +1,4 @@
-﻿@model PlcCreatorSystem_WEB.Models.Dto.PlcDTO
+﻿@model PlcCreatorSystem_WEB.Models.VM.PlcDeleteVM
 
 <form asp-action="DeletePlc">
     <br />
@@ -6,55 +6,62 @@
         <h1 class="text-primaey">DeletePlc</h1>
         <hr />
 
-        <input hidden asp-for="Id" />
+        <input hidden asp-for="plcDeleteVM.Id" />
         <div class="row">
             <div class="col-2">
-                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Name" disabled class="form-control" />
+                <input asp-for="plcDeleteVM.Name" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Subnet_X1" disabled class="form-control" />
+                <input asp-for="plcDeleteVM.Subnet_X1" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP_X1" disabled class="form-control" />
+                <input asp-for="plcDeleteVM.IP_X1" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Subnet_X2" disabled class="form-control" />
+                <input asp-for="plcDeleteVM.Subnet_X2" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP_X2" disabled class="form-control" />
+                <input asp-for="plcDeleteVM.IP_X2" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10  pb-3">
-                <input asp-for="Identyfier" disabled class="form-control" />
+                <input asp-for="plcDeleteVM.Identyfier" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="Details" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcDeleteVM.Details" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10  pb-3">
-                <textarea asp-for="Details" disabled class="form-control" rows="5"></textarea>
+                <textarea asp-for="plcDeleteVM.Details" disabled class="form-control" rows="5"></textarea>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="plcDeleteVM.UserID" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="plcDeleteVM.UserID" class="form-control" />
             </div>
 
             <div class="col-5 offset-2">

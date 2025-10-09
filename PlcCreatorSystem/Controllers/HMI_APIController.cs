@@ -184,13 +184,6 @@ namespace PlcCreatorSystem_API.Controllers
         {
             try
             {
-                if (updateDTO == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorsMessages = new List<string> { "Payload cannot be null." };
-                    return BadRequest(_response);
-                }
                 if (await _dbUSER.GetAsync(u => u.Id == updateDTO.UserID) == null)
                 {
                     _response.IsSuccess = false;

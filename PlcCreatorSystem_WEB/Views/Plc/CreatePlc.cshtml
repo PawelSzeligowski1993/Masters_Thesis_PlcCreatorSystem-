@@ -1,4 +1,4 @@
-﻿@model PlcCreatorSystem_WEB.Models.Dto.PlcCreateDTO
+﻿@model PlcCreatorSystem_WEB.Models.VM.PlcCreateVM
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
 @{
     var user = httpAcc.HttpContext.User;
@@ -13,59 +13,69 @@
             <div asp-validation-summary="ModelOnly" class="text-dnager"></div>
 
             <div class="col-2">
-                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="plcCreateVM.Name" class="form-control" />
+                <span asp-validation-for="plcCreateVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.Subnet_X1" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Subnet_X1" class="form-control" />
-                <span asp-validation-for="Subnet_X1" class="text-danger"></span>
+                <input asp-for="plcCreateVM.Subnet_X1" class="form-control" />
+                <span asp-validation-for="plcCreateVM.Subnet_X1" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.IP_X1" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP_X1" class="form-control" />
-                <span asp-validation-for="IP_X1" class="text-danger"></span>
+                <input asp-for="plcCreateVM.IP_X1" class="form-control" />
+                <span asp-validation-for="plcCreateVM.IP_X1" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.Subnet_X2" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Subnet_X2" class="form-control" />
-                <span asp-validation-for="Subnet_X2" class="text-danger"></span>
+                <input asp-for="plcCreateVM.Subnet_X2" class="form-control" />
+                <span asp-validation-for="plcCreateVM.Subnet_X2" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.IP_X2" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="IP_X2" class="form-control" />
-                <span asp-validation-for="IP_X2" class="text-danger"></span>
+                <input asp-for="plcCreateVM.IP_X2" class="form-control" />
+                <span asp-validation-for="plcCreateVM.IP_X2" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Identyfier" class="form-control" />
-                <span asp-validation-for="Identyfier" class="text-danger"></span>
+                <input asp-for="plcCreateVM.Identyfier" class="form-control" />
+                <span asp-validation-for="plcCreateVM.Identyfier" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Details" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="plcCreateVM.Details" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10  pb-3">
-                <textarea asp-for="Details" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Details" class="text-danger"></span>
+                <textarea asp-for="plcCreateVM.Details" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="plcCreateVM.Details" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="plcCreateVM.UserID" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <select asp-for="plcCreateVM.UserID" class="form-select" asp-items="@Model.usersList">
+                    <option disabled selected>--Select User--</option>
+                </select>
+                <span asp-validation-for="plcCreateVM.UserID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
