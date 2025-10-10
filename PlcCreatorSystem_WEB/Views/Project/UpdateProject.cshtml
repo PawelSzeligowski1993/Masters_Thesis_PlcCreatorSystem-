@@ -5,62 +5,64 @@
     <div class="container border p-3">
         <h1 class="text-primaey">Update Project</h1>
         <hr />
-
+        <input hidden asp-for="projectUpdateVM.Id" />
         <div class="row">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-2">
-                <label asp-for="projectVM.Id" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectUpdateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="projectVM.Id" class="form-control" />
-                <span asp-validation-for="projectVM.Id" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="projectVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="projectVM.Name" class="form-control" />
-                <span asp-validation-for="projectVM.Name" class="text-danger"></span>
+                <input asp-for="projectUpdateVM.Name" class="form-control" />
+                <span asp-validation-for="projectUpdateVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.PlcID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectUpdateVM.PlcID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="projectVM.PlcID" class="form-select" asp-items="@Model.plcList">
+                <select asp-for="projectUpdateVM.PlcID" class="form-select" asp-items="@Model.plcList">
                     <option disabled selected>--Select PLC--</option>
                 </select>
-                <span asp-validation-for="projectVM.PlcID" class="text-danger"></span>
+                <span asp-validation-for="projectUpdateVM.PlcID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.HmiID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectUpdateVM.HmiID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="projectVM.HmiID" class="form-select" asp-items="@Model.hmiList">
+                <select asp-for="projectUpdateVM.HmiID" class="form-select" asp-items="@Model.hmiList">
                     <option disabled selected>--Select HMI--</option>
                 </select>
-                <span asp-validation-for="projectVM.HmiID" class="text-danger"></span>
+                <span asp-validation-for="projectUpdateVM.HmiID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.CustomerDetails" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectUpdateVM.CustomerDetails" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="projectVM.CustomerDetails" class="form-control" />
-                <span asp-validation-for="projectVM.CustomerDetails" class="text-danger"></span>
+                <input asp-for="projectUpdateVM.CustomerDetails" class="form-control" />
+                <span asp-validation-for="projectUpdateVM.CustomerDetails" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.Status" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectUpdateVM.Status" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="projectVM.Status" class="form-select" asp-items="Model.statusList">
+                <select asp-for="projectUpdateVM.Status" class="form-select" asp-items="Model.statusList">
                     <option disabled selected>-- Select Status --</option>
                 </select>
-                <span asp-validation-for="projectVM.Status" class="text-danger"></span>
+                <span asp-validation-for="projectUpdateVM.Status" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="projectUpdateVM.UserID" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <select asp-for="projectUpdateVM.UserID" class="form-select" asp-items="@Model.usersList">
+                    <option disabled selected>--Select User--</option>
+                </select>
+                <span asp-validation-for="projectUpdateVM.UserID" class="text-danger"></span>
             </div>
 
             <div class="col-5 offset-2">

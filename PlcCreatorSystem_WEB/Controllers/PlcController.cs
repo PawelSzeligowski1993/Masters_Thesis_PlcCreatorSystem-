@@ -9,6 +9,7 @@ using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Models.VM;
 using PlcCreatorSystem_WEB.Services.IServices;
+using System.Security.Claims;
 
 namespace PlcCreatorSystem_WEB.Controllers
 {
@@ -51,7 +52,6 @@ namespace PlcCreatorSystem_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePlc(PlcCreateVM model)
         {
-
             if (ModelState.IsValid)
             {
                 var response = await _plcService.CreateAsync<APIResponse>(model.plcCreateVM, HttpContext.Session.GetString(SD.SessionToken));
@@ -67,6 +67,9 @@ namespace PlcCreatorSystem_WEB.Controllers
                         ModelState.AddModelError("ErrorMessages", response.ErrorsMessages.FirstOrDefault());
                     }
                 }
+            }else
+            {
+                //ModelState.AddModelError("ErrorMessages", model.ErrorsMessages.FirstOrDefault());//Error model is not Valid
             }
             await PopulateLookups(model);
             return View(model);
@@ -157,6 +160,11 @@ namespace PlcCreatorSystem_WEB.Controllers
         //HmiCreateVM
         private async Task PopulateLookups(PlcCreateVM model)
         {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdStr, out var id))
+            {
+                model.plcCreateVM.UserID = id;
+            }
             var responseHmi = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responseHmi != null && responseHmi.IsSuccess == true)
             {

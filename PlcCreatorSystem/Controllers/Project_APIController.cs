@@ -207,17 +207,17 @@ namespace PlcCreatorSystem_API.Controllers
                 {
                     return BadRequest();
                 }
-                if (await _dbProject.GetAsync(u => u.Id == updateDTO.PlcID) == null)
+                if (await _dbPLC.GetAsync(u => u.Id == updateDTO.PlcID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "PLC ID is Invalid!");
                     return BadRequest(ModelState);
                 }
-                if (await _dbProject.GetAsync(u => u.Id == updateDTO.HmiID) == null)
+                if (await _dbHMI.GetAsync(u => u.Id == updateDTO.HmiID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "HMI ID is Invalid!");
                     return BadRequest(ModelState);
                 }
-                if (await _dbPLC.GetAsync(u => u.Id == updateDTO.UserID) == null)
+                if (await _dbUSER.GetAsync(u => u.Id == updateDTO.UserID) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "User ID is Invalid!");
                     return BadRequest(ModelState);

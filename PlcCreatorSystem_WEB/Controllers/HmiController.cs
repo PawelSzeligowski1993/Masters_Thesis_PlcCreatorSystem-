@@ -9,15 +9,16 @@ using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Models.VM;
 using PlcCreatorSystem_WEB.Services.IServices;
 using PlcCreatorSystem_WEB.Services;
-
+using System.Security.Claims;
 
 namespace PlcCreatorSystem_WEB.Controllers
 {
     public class HmiController : Controller
     {
         private readonly IHmiService _hmiService;
-        private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
+        
 
         public HmiController(IHmiService hmiService, IUserService userService, IMapper mapper )
         {
@@ -55,7 +56,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _hmiService.CreateAsync<APIResponse>(model.hmicreateVM, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _hmiService.CreateAsync<APIResponse>(model.hmiCreateVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     TempData["success"] = "Plc created successfully";
@@ -159,11 +160,16 @@ namespace PlcCreatorSystem_WEB.Controllers
         //HmiCreateVM
         private async Task PopulateLookups(HmiCreateVM model)
         {
-            var responseHmi = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
-            if (responseHmi != null && responseHmi.IsSuccess == true)
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdStr, out var id))
+            {
+                model.hmiCreateVM.UserID = id;
+            }
+            var responseUser = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            if (responseUser != null && responseUser.IsSuccess == true)
             {
                 model.usersList = JsonConvert.DeserializeObject<List<UserDTO>>
-                    (Convert.ToString(responseHmi.Result)).Select(i => new SelectListItem
+                    (Convert.ToString(responseUser.Result)).Select(i => new SelectListItem
                     {
                         Text = i.Name,
                         Value = i.Id.ToString()
@@ -175,11 +181,11 @@ namespace PlcCreatorSystem_WEB.Controllers
         //HmiUpdateVM
         private async Task PopulateLookups(HmiUpdateVM model)
         {
-            var responseHmi = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
-            if (responseHmi != null && responseHmi.IsSuccess == true)
+            var responseUser = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            if (responseUser != null && responseUser.IsSuccess == true)
             {
                 model.usersList = JsonConvert.DeserializeObject<List<UserDTO>>
-                    (Convert.ToString(responseHmi.Result)).Select(i => new SelectListItem
+                    (Convert.ToString(responseUser.Result)).Select(i => new SelectListItem
                     {
                         Text = i.Name,
                         Value = i.Id.ToString()

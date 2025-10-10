@@ -8,9 +8,9 @@ namespace PlcCreatorSystem_WEB.Models.VM
     {
         public ProjectUpdateVM()
         {
-            projectVM = new ProjectUpdateDTO();
+            projectUpdateVM = new ProjectUpdateDTO();
         }
-        public ProjectUpdateDTO projectVM { get; set; }
+        public ProjectUpdateDTO projectUpdateVM { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> plcList { get; set; }
         [ValidateNever]

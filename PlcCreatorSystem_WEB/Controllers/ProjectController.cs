@@ -9,6 +9,7 @@ using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Models.VM;
 using PlcCreatorSystem_WEB.Services.IServices;
 using PlcCreatorSystem_Utility;
+using System.Security.Claims;
 
 namespace PlcCreatorSystem_WEB.Controllers
 {
@@ -17,14 +18,16 @@ namespace PlcCreatorSystem_WEB.Controllers
         private readonly IProjectService _projectService;
         private readonly IPlcService _plcService;
         private readonly IHmiService _hmiService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public ProjectController(IProjectService projectService, IMapper mapper, IPlcService plcService, IHmiService hmiService)
+        public ProjectController(IProjectService projectService, IPlcService plcService, IHmiService hmiService, IUserService userService, IMapper mapper)
         {
             _projectService = projectService;
-            _mapper = mapper;
             _plcService = plcService;
             _hmiService = hmiService;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "admin,engineer,custom")]
@@ -46,7 +49,7 @@ namespace PlcCreatorSystem_WEB.Controllers
             ProjectCreateVM projectVM = new();
             await PopulateLookups(projectVM);
             //default status = "waiting_to_check"
-            projectVM.projectVM.Status = SD.ProjectStatus.waiting_to_check;
+            projectVM.projectCreateVM.Status = SD.ProjectStatus.waiting_to_check;
             return View(projectVM);
         }
 
@@ -57,13 +60,14 @@ namespace PlcCreatorSystem_WEB.Controllers
         {
             //default status = "waiting_to_check"
             ModelState.Remove("project.Status");
-            model.projectVM.Status = SD.ProjectStatus.waiting_to_check;
+            model.projectCreateVM.Status = SD.ProjectStatus.waiting_to_check;
 
             if (ModelState.IsValid)
             {
-                var response = await _projectService.CreateAsync<APIResponse>(model.projectVM, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _projectService.CreateAsync<APIResponse>(model.projectCreateVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
+                    TempData["success"] = "Project created successfully";
                     return RedirectToAction(nameof(IndexProject));
                 }
                 else
@@ -86,13 +90,10 @@ namespace PlcCreatorSystem_WEB.Controllers
             if (response != null && response.IsSuccess)
             {
                 ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
-                projectVM.projectVM = _mapper.Map<ProjectUpdateDTO>(model);
-                //return View(_mapper.Map<ProjectUpdateDTO>(model));
-
+                projectVM.projectUpdateVM = _mapper.Map<ProjectUpdateDTO>(model);
                 await PopulateLookups(projectVM);
                 return View(projectVM);
             }
-
             return NotFound();
         }
 
@@ -104,7 +105,7 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await _projectService.UpdateAsync<APIResponse>(model.projectVM, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _projectService.UpdateAsync<APIResponse>(model.projectUpdateVM, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexProject));
@@ -134,7 +135,6 @@ namespace PlcCreatorSystem_WEB.Controllers
                 await PopulateLookups(projectVM);
                 return View(projectVM);
             }
-
             return NotFound();
         }
 
@@ -146,17 +146,32 @@ namespace PlcCreatorSystem_WEB.Controllers
             var response = await _projectService.DeleteAsync<APIResponse>(model.projectVM.Id, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
+                TempData["success"] = "Project deleted successfully";
                 return RedirectToAction(nameof(IndexProject));
+            }
+            else
+            {
+                if (response.ErrorsMessages.Count > 0)
+                {
+                    ModelState.AddModelError("ErrorMessages", response.ErrorsMessages.FirstOrDefault());
+                }
             }
             await PopulateLookups(model);
             return View(model);
         }
 
-        /*----------------------------------------------------------------------------------------*/
-
-        // --------------------------- Populate View with PLC and HMI -----------------------------
+        //************************************************************************************************
+        //****************************** Methods - PopulateLookups ***************************************
+        //************************************************************************************************
+        // --------------------------- Populate View with PLC, HMI, and USER -----------------------------
+        //ProjectCreateVM
         private async Task PopulateLookups(ProjectCreateVM model)
         {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdStr, out var id))
+            {
+                model.projectCreateVM.UserID = id;
+            }
             var responsePlc = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responsePlc != null && responsePlc.IsSuccess == true)
             {
@@ -167,6 +182,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                         Value = i.Id.ToString()
                     });
             }
+
 
             var responseHmi = await _hmiService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (responseHmi != null && responseHmi.IsSuccess)
@@ -186,8 +202,20 @@ namespace PlcCreatorSystem_WEB.Controllers
                     Value = i.ToString(),
                     Selected = (i == SD.ProjectStatus.waiting_to_check)
                 });
+
+            var responseUser = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            if (responseUser != null && responseUser.IsSuccess == true)
+            {
+                model.usersList = JsonConvert.DeserializeObject<List<UserDTO>>
+                    (Convert.ToString(responseUser.Result)).Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                    });
+            }
         }
 
+        //ProjectUpdateVM
         private async Task PopulateLookups(ProjectUpdateVM model)
         {
             var responsePlc = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
@@ -218,8 +246,20 @@ namespace PlcCreatorSystem_WEB.Controllers
                     Text = i.ToString(),
                     Value = i.ToString()
                 });
+
+            var responseUser = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            if (responseUser != null && responseUser.IsSuccess == true)
+            {
+                model.usersList = JsonConvert.DeserializeObject<List<UserDTO>>
+                    (Convert.ToString(responseUser.Result)).Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                    });
+            }
         }
 
+        //ProjectDeleteVM           
         private async Task PopulateLookups(ProjectDeleteVM model)
         {
             var responsePlc = await _plcService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
@@ -238,6 +278,24 @@ namespace PlcCreatorSystem_WEB.Controllers
             {
                 model.hmiList = JsonConvert.DeserializeObject<List<HmiDTO>>
                     (Convert.ToString(responseHmi.Result)).Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                    });
+            }
+
+            model.statusList = Enum.GetValues(typeof(SD.ProjectStatus)).Cast<SD.ProjectStatus>()
+                .Select(i => new SelectListItem
+                {
+                Text = i.ToString(),
+                Value = i.ToString()
+                });
+
+            var responseUser = await _userService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            if (responseUser != null && responseUser.IsSuccess == true)
+            {
+                model.usersList = JsonConvert.DeserializeObject<List<UserDTO>>
+                    (Convert.ToString(responseUser.Result)).Select(i => new SelectListItem
                     {
                         Text = i.Name,
                         Value = i.Id.ToString()

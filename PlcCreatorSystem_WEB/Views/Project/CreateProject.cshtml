@@ -1,5 +1,7 @@
 ﻿@using PlcCreatorSystem_Utility;
+@using System.Security.Claims
 @model PlcCreatorSystem_WEB.Models.VM.ProjectCreateVM
+
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
 @{
     var user = httpAcc.HttpContext.User;
@@ -15,39 +17,39 @@
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="col-2">
-                <label asp-for="projectVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectCreateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="projectVM.Name" class="form-control" />
-                <span asp-validation-for="projectVM.Name" class="text-danger"></span>
+                <input asp-for="projectCreateVM.Name" class="form-control" />
+                <span asp-validation-for="projectCreateVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.PlcID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectCreateVM.PlcID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="projectVM.PlcID" class="form-select" asp-items="@Model.plcList">
+                <select asp-for="projectCreateVM.PlcID" class="form-select" asp-items="@Model.plcList">
                     <option disabled selected>--Select PLC--</option>
                 </select>
-                <span asp-validation-for="projectVM.PlcID" class="text-danger"></span>
+                <span asp-validation-for="projectCreateVM.PlcID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.HmiID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectCreateVM.HmiID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="projectVM.HmiID" class="form-select" asp-items="@Model.hmiList">
+                <select asp-for="projectCreateVM.HmiID" class="form-select" asp-items="@Model.hmiList">
                     <option disabled selected>--Select HMI--</option>
                 </select>
-                <span asp-validation-for="projectVM.HmiID" class="text-danger"></span>
+                <span asp-validation-for="projectCreateVM.HmiID" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="projectVM.CustomerDetails" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="projectCreateVM.CustomerDetails" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="projectVM.CustomerDetails" class="form-control" />
-                <span asp-validation-for="projectVM.CustomerDetails" class="text-danger"></span>
+                <input asp-for="projectCreateVM.CustomerDetails" class="form-control" />
+                <span asp-validation-for="projectCreateVM.CustomerDetails" class="text-danger"></span>
             </div>
 
             <div class="col-2">
@@ -64,8 +66,11 @@
             </div>
             <div class="col-10 pb-3">
                 <div class="btn btn-warning form-control text-center" style="pointer-events:none; cursor:default;">
-                    @user
+                    @User.Identity?.Name
                 </div>
+
+                <input type="hidden" asp-for="projectCreateVM.UserID"
+                       value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
             </div>
             
             <div class="col-5 offset-2">

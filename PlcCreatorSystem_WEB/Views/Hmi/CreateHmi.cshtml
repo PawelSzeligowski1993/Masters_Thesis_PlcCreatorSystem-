@@ -1,4 +1,5 @@
 ﻿@model PlcCreatorSystem_WEB.Models.VM.HmiCreateVM
+@using System.Security.Claims
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
 @{
     var user = httpAcc.HttpContext.User;
@@ -13,45 +14,47 @@
             <div asp-validation-summary="ModelOnly" class="text-dnager"></div>
 
             <div class="col-2">
-                <label asp-for="hmicreateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="hmiCreateVM.Name" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="hmicreateVM.Name" class="form-control" />
-                <span asp-validation-for="hmicreateVM.Name" class="text-danger"></span>
+                <input asp-for="hmiCreateVM.Name" class="form-control" />
+                <span asp-validation-for="hmiCreateVM.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="hmicreateVM.IP" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="hmiCreateVM.IP" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="hmicreateVM.IP" class="form-control" />
-                <span asp-validation-for="hmicreateVM.IP" class="text-danger"></span>
+                <input asp-for="hmiCreateVM.IP" class="form-control" />
+                <span asp-validation-for="hmiCreateVM.IP" class="text-danger"></span>
             </div>
              
             <div class="col-2">
-                <label asp-for="hmicreateVM.Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="hmiCreateVM.Identyfier" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="hmicreateVM.Identyfier" class="form-control" />
-                <span asp-validation-for="hmicreateVM.Identyfier" class="text-danger"></span>
+                <input asp-for="hmiCreateVM.Identyfier" class="form-control" />
+                <span asp-validation-for="hmiCreateVM.Identyfier" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="hmicreateVM.Details" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="hmiCreateVM.Details" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10  pb-3">
-                <textarea asp-for="hmicreateVM.Details" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="hmicreateVM.Details" class="text-danger"></span>
+                <textarea asp-for="hmiCreateVM.Details" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="hmiCreateVM.Details" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="hmicreateVM.UserID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label class="control-label pt-2" style="font-size:20px;">Author</label>
             </div>
             <div class="col-10 pb-3">
-                <select asp-for="hmicreateVM.UserID" class="form-select" asp-items="@Model.usersList">
-                    <option disabled selected>--Select User--</option>
-                </select>
-                <span asp-validation-for="hmicreateVM.UserID" class="text-danger"></span>
+                <div class="btn btn-warning form-control text-center" style="pointer-events:none; cursor:default;">
+                    @User.Identity?.Name
+                </div>
+
+                <input type="hidden" asp-for="hmiCreateVM.UserID"
+                       value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
             </div>
 
             <div class="col-5 offset-2">

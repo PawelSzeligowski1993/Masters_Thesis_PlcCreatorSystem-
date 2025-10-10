@@ -50,6 +50,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                 LoginResponseDTO loginResponseDTO = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginResponseDTO.User.Id.ToString()));//added
                 identity.AddClaim(new Claim(ClaimTypes.Name, loginResponseDTO.User.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Role, loginResponseDTO.User.Role)); //could be array of roles or loop the roles if multiple role are
                 var principal = new ClaimsPrincipal(identity);
