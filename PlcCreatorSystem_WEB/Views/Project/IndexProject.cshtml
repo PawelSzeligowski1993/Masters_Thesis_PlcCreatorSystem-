@@ -74,7 +74,12 @@
                         <td>
                             <a asp-controller="Project" asp-action="UpdateProject" asp-route-id="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                             <a asp-controller="Project" asp-action="DeleteProject" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
-
+                            <a asp-action="Download" asp-route-id="@item.Id" class="btn btn-sm btn-success">
+                                Download TIA
+                            </a>
+                            <a asp-controller="Project" asp-action="UploadCsv" class="btn btn-outline-primary form-control">
+                                Go to Upload CSV
+                            </a>
                         </td>
                     }
                 </tr>

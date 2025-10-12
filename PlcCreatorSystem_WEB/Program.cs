@@ -40,6 +40,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+//add client gRPC
+builder.Services.AddHttpClient("PLC_CREATOR_SYSTEM_API", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Creator_API"]!);
+});
+
 var app = builder.Build();
 
 

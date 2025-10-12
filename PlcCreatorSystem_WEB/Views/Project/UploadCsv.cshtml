@@ -1,0 +1,23 @@
+﻿@model PlcCreatorSystem_WEB.Models.VM.UploadCsvVM
+
+<form asp-action="UploadCsv" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="ProjectId"></label>
+        <input asp-for="ProjectId" class="form-control" />
+        <span asp-validation-for="ProjectId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CsvFile"></label>
+        <input asp-for="CsvFile" type="file" accept=".csv" class="form-control" />
+        <span asp-validation-for="CsvFile" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Upload CSV</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

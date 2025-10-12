@@ -19,5 +19,6 @@ namespace PlcCreatorSystem_WEB.Models.Dto
         public ProjectStatus Status { get; set; }  // enum
         [Required]
         public int UserID { get; set; }
+        //public IFormFile? CsvFile { get; set; } //file to send
     }
 }

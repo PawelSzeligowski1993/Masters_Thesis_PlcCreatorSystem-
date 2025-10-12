@@ -10,6 +10,7 @@ using PlcCreatorSystem_WEB.Models.VM;
 using PlcCreatorSystem_WEB.Services.IServices;
 using PlcCreatorSystem_Utility;
 using System.Security.Claims;
+using System.Net.Http.Headers;
 
 namespace PlcCreatorSystem_WEB.Controllers
 {
@@ -19,15 +20,18 @@ namespace PlcCreatorSystem_WEB.Controllers
         private readonly IPlcService _plcService;
         private readonly IHmiService _hmiService;
         private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        
 
-        public ProjectController(IProjectService projectService, IPlcService plcService, IHmiService hmiService, IUserService userService, IMapper mapper)
+        public ProjectController(IProjectService projectService, IPlcService plcService, IHmiService hmiService, IUserService userService, IMapper mapper, IConfiguration configuration)
         {
             _projectService = projectService;
             _plcService = plcService;
             _hmiService = hmiService;
             _userService = userService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         [Authorize(Roles = "admin,engineer,custom")]
@@ -59,7 +63,7 @@ namespace PlcCreatorSystem_WEB.Controllers
         public async Task<IActionResult> CreateProject(ProjectCreateVM model)
         {
             //default status = "waiting_to_check"
-            ModelState.Remove("project.Status");
+            ModelState.Remove("projectCreateVM.Status");
             model.projectCreateVM.Status = SD.ProjectStatus.waiting_to_check;
 
             if (ModelState.IsValid)
@@ -160,6 +164,72 @@ namespace PlcCreatorSystem_WEB.Controllers
             return View(model);
         }
 
+        //---------------------------------------------------------------------------------------------
+        //************************************ gRPC Controlers ****************************************
+        //---------------------------------------------------------------------------------------------
+
+        //-------------------------------- gRPC POST and Get CSV Files --------------------------------
+        // GET: /UploadCsv/UploadCsv
+        [Authorize(Roles = "admin,engineer")]
+        [HttpGet]
+        public IActionResult UploadCsv()
+        {
+            return View(new UploadCsvVM());  
+        }
+
+        // POST: /UploadCsv/UploadCsv
+        [Authorize(Roles = "admin,engineer")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadCsv(UploadCsvVM vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var token = HttpContext.Session.GetString(SD.SessionToken) ?? string.Empty;
+
+            var resp = await _projectService.UploadCsvAsync(vm.ProjectId, vm.CsvFile, token);
+
+            if (resp.IsSuccess)
+            {
+                TempData["success"] = "CSV uploaded successfully.";
+                return RedirectToAction("IndexProject", "Project");
+            }
+
+            // show API error, if any
+            var msg = resp.ErrorsMessages?.FirstOrDefault() ?? "Upload failed.";
+            ModelState.AddModelError("ErrorMessages", msg);
+            return View(vm);
+        }
+
+
+
+        //-------------------------------- gRPC Downland TIA.zap File --------------------------------
+        [Authorize(Roles = "admin,engineer,custom")]
+        public async Task<IActionResult> Download(int id)
+        {
+            var token = HttpContext.Session.GetString(PlcCreatorSystem_Utility.SD.SessionToken) ?? "";
+            var apiBase = _configuration["ServiceUrls:Creator_API"]; // e.g. https://localhost:7251
+            var url = $"{apiBase}/api/Project_API/{id}/download";
+
+            using var client = new HttpClient();
+            if (!string.IsNullOrWhiteSpace(token))
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            using var resp = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            if (!resp.IsSuccessStatusCode)
+            {
+                TempData["error"] = "TIA project not available yet.";
+                return RedirectToAction(nameof(IndexProject));
+            }
+
+            var fileName = resp.Content.Headers.ContentDisposition?.FileName?.Trim('\"')
+                           ?? $"Project_{id}.zap17";
+            var stream = await resp.Content.ReadAsStreamAsync();
+
+            return File(stream, "application/octet-stream", fileName);
+        }
+
         //************************************************************************************************
         //****************************** Methods - PopulateLookups ***************************************
         //************************************************************************************************
@@ -180,7 +250,7 @@ namespace PlcCreatorSystem_WEB.Controllers
                     {
                         Text = i.Name,
                         Value = i.Id.ToString()
-                    });
+                    }); 
             }
 
 

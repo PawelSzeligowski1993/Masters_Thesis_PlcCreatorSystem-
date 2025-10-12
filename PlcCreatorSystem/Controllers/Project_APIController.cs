@@ -2,10 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using PlcCreatorSystem.Generator;
 using PlcCreatorSystem_API.Models;
 using PlcCreatorSystem_API.Models.Dto;
 using PlcCreatorSystem_API.Repository.IRepository;
+using PlcCreatorSystem_API.TIA;
 using System.Net;
+using System.Net.Mime;
 
 namespace PlcCreatorSystem_API.Controllers
 {
@@ -19,8 +23,9 @@ namespace PlcCreatorSystem_API.Controllers
         private readonly IHMIRepository _dbHMI;
         private readonly IMapper _mapper;
         private readonly IUserRepository _dbUSER;
+        private readonly GeneratorService.GeneratorServiceClient _generator;
 
-        public Project_APIController(IProjectRepository dbProject, IMapper mapper, IPLCRepository dbPLC, IHMIRepository dbHMI, IUserRepository dbUSER)
+        public Project_APIController(IProjectRepository dbProject, IMapper mapper, IPLCRepository dbPLC, IHMIRepository dbHMI, IUserRepository dbUSER, GeneratorService.GeneratorServiceClient generator)
         {
             _dbProject = dbProject;
             _mapper = mapper;
@@ -28,6 +33,7 @@ namespace PlcCreatorSystem_API.Controllers
             _dbPLC = dbPLC;
             _dbHMI = dbHMI;
             _dbUSER = dbUSER;
+            _generator = generator;
         }
 
         [Authorize(Roles = "admin,engineer,custom")]
@@ -95,6 +101,10 @@ namespace PlcCreatorSystem_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        //gRPC
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(100_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000)]
         public async Task<ActionResult<APIResponse>> CreateProject([FromBody] ProjectCreateDTO createDTO)
         {
             try
@@ -237,5 +247,59 @@ namespace PlcCreatorSystem_API.Controllers
             }
             return _response;
         }
+        // ----------------------- gRPC END POINTS-----------------------------------
+        [Authorize(Roles = "admin,engineer")]
+        [HttpPost("{id:int}/csv")]
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(100_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000)]
+        public async Task<IActionResult> UploadCsv(int id, IFormFile csvFile)
+        {
+            if (csvFile is null || csvFile.Length == 0)
+                return BadRequest(new APIResponse { IsSuccess = false, ErrorsMessages = { "CSV file is required." } });
+
+            var project = await _dbProject.GetAsync(p => p.Id == id);
+            if (project is null)
+                return NotFound(new APIResponse { IsSuccess = false, ErrorsMessages = { "Project not found." } });
+
+            const int chunk = 64 * 1024;
+            var buffer = new byte[chunk];
+
+            using var call = _generator.UploadCsvStream();
+            await using var s = csvFile.OpenReadStream();
+
+            int read; bool first = true;
+            while ((read = await s.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                var up = new UploadChunk { Data = Google.Protobuf.ByteString.CopyFrom(buffer, 0, read) };
+                if (first) { up.FileName = csvFile.FileName; first = false; }
+                await call.RequestStream.WriteAsync(up);
+            }
+            await call.RequestStream.CompleteAsync();
+            var reply = await call.ResponseAsync;
+            if (!reply.Ok) return Problem($"CSV upload failed: {reply.Msg}");
+
+            return Ok(new APIResponse { IsSuccess = true, Result = new { id, msg = "CSV uploaded" } });
+        }
+
+        [Authorize(Roles = "admin,engineer")]
+        [HttpGet("{id:int}/download")]
+        public async Task<IActionResult> DownloadTiaProject(int id, [FromServices] IOptions<TiaStorageOptions> tia)
+        {
+            var project = await _dbProject.GetAsync(p => p.Id == id);
+            if (project == null)
+                return NotFound(new APIResponse { IsSuccess = false, ErrorsMessages = { "Project not found." } });
+
+            var name = string.IsNullOrWhiteSpace(project.Name) ? "Project" : project.Name;
+            var path = Path.Combine(tia.Value.TiaRoot, $"{name}.zap17");
+
+            if (!System.IO.File.Exists(path))
+                return NotFound(new APIResponse { IsSuccess = false, ErrorsMessages = { $"TIA project not ready: {name}.zap17" } });
+
+            var stream = System.IO.File.OpenRead(path);
+            return File(stream, MediaTypeNames.Application.Octet, $"{name}.zap17");
+        }
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using static PlcCreatorSystem_Utility.SD;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace PlcCreatorSystem_API.Models.Dto
 {
@@ -20,5 +21,6 @@ namespace PlcCreatorSystem_API.Models.Dto
         public ProjectStatus Status { get; set; }  // enum
         [Required]
         public int UserID { get; set; }
+        //public IFormFile? CsvFile { get; set; }
     }
 }

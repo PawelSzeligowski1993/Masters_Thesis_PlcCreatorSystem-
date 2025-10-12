@@ -1,4 +1,5 @@
-﻿using PlcCreatorSystem_WEB.Models.Dto;
+﻿using PlcCreatorSystem_WEB.Models;
+using PlcCreatorSystem_WEB.Models.Dto;
 
 namespace PlcCreatorSystem_WEB.Services.IServices
 {
@@ -9,5 +10,6 @@ namespace PlcCreatorSystem_WEB.Services.IServices
         Task<T> CreateAsync<T>(ProjectCreateDTO dto, string token);
         Task<T> UpdateAsync<T>(ProjectUpdateDTO dto, string token);
         Task<T> DeleteAsync<T>(int id, string token);
+        Task<APIResponse> UploadCsvAsync(int projectId, IFormFile csvFile, string token);
     }
 }

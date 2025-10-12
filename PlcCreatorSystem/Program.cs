@@ -7,6 +7,8 @@ using PlcCreatorSystem_API.Data;
 using PlcCreatorSystem_API.Repository;
 using PlcCreatorSystem_API.Repository.IRepository;
 using System.Text;
+using PlcCreatorSystem.Generator;
+using PlcCreatorSystem_API.TIA;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +85,13 @@ builder.Services.AddSwaggerGen(options =>{
         }
     });
 });
+///------------ gRPC -------------
+builder.Services.AddGrpcClient<GeneratorService.GeneratorServiceClient>(o =>
+{
+    o.Address = new Uri(builder.Configuration["Grpc:GeneratorAddress"]!);
+});
+
+builder.Services.Configure<TiaStorageOptions>(builder.Configuration.GetSection("Storage"));
 
 var app = builder.Build();
 

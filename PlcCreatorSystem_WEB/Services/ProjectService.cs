@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using PlcCreatorSystem_Utility;
 using PlcCreatorSystem_WEB.Models;
 using PlcCreatorSystem_WEB.Models.Dto;
 using PlcCreatorSystem_WEB.Services.IServices;
+using System.Net.Http.Headers;
 
 namespace PlcCreatorSystem_WEB.Services
 {
@@ -66,6 +68,35 @@ namespace PlcCreatorSystem_WEB.Services
                 Url = projectUrl + "/api/Project_API/" + dto.Id,
                 Token = token
             });
+        }
+
+        public async Task<APIResponse> UploadCsvAsync(int projectId, IFormFile csvFile, string token)
+        {
+            if (csvFile == null || csvFile.Length == 0)
+                return new APIResponse { IsSuccess = false, ErrorsMessages = new List<string> { "CSV file is required." } };
+
+            var client = httpClient.CreateClient("PLC_CREATOR_SYSTEM_API");
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            using var form = new MultipartFormDataContent();
+            using var fileContent = new StreamContent(csvFile.OpenReadStream());
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            form.Add(fileContent, "csvFile", csvFile.FileName);
+
+            var resp = await client.PostAsync($"/api/Project_API/{projectId}/csv", form);
+
+            var body = await resp.Content.ReadAsStringAsync();
+            var api = JsonConvert.DeserializeObject<APIResponse>(body) ?? new APIResponse();
+
+            if (!resp.IsSuccessStatusCode)
+                api.IsSuccess = false;
+
+            return api;
         }
     }
 }
