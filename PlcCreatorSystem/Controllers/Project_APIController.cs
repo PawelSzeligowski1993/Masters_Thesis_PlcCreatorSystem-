@@ -101,21 +101,10 @@ namespace PlcCreatorSystem_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        //gRPC
-        [Consumes("multipart/form-data")]
-        [RequestSizeLimit(100_000_000)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000)]
         public async Task<ActionResult<APIResponse>> CreateProject([FromBody] ProjectCreateDTO createDTO)
         {
             try
             {
-                if (createDTO == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorsMessages = new List<string> { "Payload cannot be null." };
-                    return BadRequest(_response);
-                }
                 if (await _dbProject.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
                     _response.IsSuccess = false;
@@ -176,7 +165,7 @@ namespace PlcCreatorSystem_API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)] 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> DeleteProject(int id)
+        public async Task<ActionResult<APIResponse>> DeleteProject(int id, [FromServices] IOptions<TiaStorageOptions> tia, [FromServices] IConfiguration cfg)
         {
             try
             {
@@ -189,6 +178,34 @@ namespace PlcCreatorSystem_API.Controllers
                 {
                     return NotFound();
                 }
+
+                var csvRoot = cfg.GetValue<string>("Storage:CsvRoot")?? @"C:\Users\pawel\Desktop\Test\CSVs";
+                var tiaRoot = cfg.GetValue<string>("Storage:TiaRoot")?? @"C:\Users\pawel\Desktop\Test\TIAProjects";
+
+
+                var csvFolder = Path.Combine(csvRoot, $"{project.Name}_CSVs");
+                var tiaFile = Path.Combine(tiaRoot, $"{project.Name}");
+
+                try
+                {
+                    bool directoryExists = Directory.Exists(csvFolder);
+                    if (directoryExists) 
+                    {
+                        Directory.Delete(csvFolder, true);
+                    }
+                    directoryExists = Directory.Exists(tiaFile);
+                    if (directoryExists)
+                    {
+                        Directory.Delete(tiaFile, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorsMessages
+                    = new List<string>() { e.ToString() };
+                }
+                    
                 await _dbProject.RemoveAsync(project);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
@@ -202,6 +219,8 @@ namespace PlcCreatorSystem_API.Controllers
             }
             return _response;
         }
+
+
 
         [Authorize(Roles = "admin,engineer")]
         [HttpPut("{id:int}", Name = "UpdateProject")]
@@ -256,7 +275,7 @@ namespace PlcCreatorSystem_API.Controllers
         public async Task<IActionResult> UploadCsv(int id, IFormFile csvFile)
         {
             if (csvFile is null || csvFile.Length == 0)
-                return BadRequest(new APIResponse { IsSuccess = false, ErrorsMessages = { "CSV file is required." } });
+                return BadRequest(new APIResponse { IsSuccess = false, ErrorsMessages = { "CSV file1 is required." } });
 
             var project = await _dbProject.GetAsync(p => p.Id == id);
             if (project is null)
@@ -267,14 +286,25 @@ namespace PlcCreatorSystem_API.Controllers
 
             using var call = _generator.UploadCsvStream();
             await using var s = csvFile.OpenReadStream();
-
+            
             int read; bool first = true;
+            
             while ((read = await s.ReadAsync(buffer, 0, buffer.Length)) > 0)
             {
-                var up = new UploadChunk { Data = Google.Protobuf.ByteString.CopyFrom(buffer, 0, read) };
-                if (first) { up.FileName = csvFile.FileName; first = false; }
+                var up = new UploadChunk 
+                { 
+                    Data = Google.Protobuf.ByteString.CopyFrom(buffer, 0, read) 
+                };
+
+                if (first) 
+                { 
+                    up.FileName = csvFile.FileName;
+                    up.Folder =  $"{project.Name}_CSVs";
+                    first = false; 
+                }
                 await call.RequestStream.WriteAsync(up);
             }
+            
             await call.RequestStream.CompleteAsync();
             var reply = await call.ResponseAsync;
             if (!reply.Ok) return Problem($"CSV upload failed: {reply.Msg}");
@@ -288,18 +318,20 @@ namespace PlcCreatorSystem_API.Controllers
         {
             var project = await _dbProject.GetAsync(p => p.Id == id);
             if (project == null)
+            { 
                 return NotFound(new APIResponse { IsSuccess = false, ErrorsMessages = { "Project not found." } });
+            }
 
             var name = string.IsNullOrWhiteSpace(project.Name) ? "Project" : project.Name;
             var path = Path.Combine(tia.Value.TiaRoot, $"{name}.zap17");
 
             if (!System.IO.File.Exists(path))
+            {
                 return NotFound(new APIResponse { IsSuccess = false, ErrorsMessages = { $"TIA project not ready: {name}.zap17" } });
+            }
 
             var stream = System.IO.File.OpenRead(path);
             return File(stream, MediaTypeNames.Application.Octet, $"{name}.zap17");
         }
-
-
     }
 }

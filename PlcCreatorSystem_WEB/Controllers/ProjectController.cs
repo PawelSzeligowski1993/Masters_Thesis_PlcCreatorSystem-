@@ -188,17 +188,23 @@ namespace PlcCreatorSystem_WEB.Controllers
 
             var token = HttpContext.Session.GetString(SD.SessionToken) ?? string.Empty;
 
-            var resp = await _projectService.UploadCsvAsync(vm.ProjectId, vm.CsvFile, token);
+            var resp1 = await _projectService.UploadCsvAsync(vm.ProjectId, vm.CsvFile1, token);
+            var resp2 = await _projectService.UploadCsvAsync(vm.ProjectId, vm.CsvFile2, token);
+            var resp3 = await _projectService.UploadCsvAsync(vm.ProjectId, vm.CsvFile3, token);
 
-            if (resp.IsSuccess)
+            if (resp1.IsSuccess && resp2.IsSuccess && resp3.IsSuccess)
             {
-                TempData["success"] = "CSV uploaded successfully.";
+                TempData["success"] = "CSVs uploaded successfully.";
                 return RedirectToAction("IndexProject", "Project");
             }
 
             // show API error, if any
-            var msg = resp.ErrorsMessages?.FirstOrDefault() ?? "Upload failed.";
-            ModelState.AddModelError("ErrorMessages", msg);
+            var msg1 = resp1.ErrorsMessages?.FirstOrDefault() ?? "Upload CSV1 failed.";
+            var msg2 = resp2.ErrorsMessages?.FirstOrDefault() ?? "Upload CSV2 failed.";
+            var msg3 = resp3.ErrorsMessages?.FirstOrDefault() ?? "Upload CSV3 failed.";
+            ModelState.AddModelError("ErrorMessages", msg1);
+            ModelState.AddModelError("ErrorMessages", msg2);
+            ModelState.AddModelError("ErrorMessages", msg3);
             return View(vm);
         }
 

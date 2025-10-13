@@ -10,9 +10,21 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="CsvFile"></label>
-        <input asp-for="CsvFile" type="file" accept=".csv" class="form-control" />
-        <span asp-validation-for="CsvFile" class="text-danger"></span>
+        <label asp-for="CsvFile1"></label>
+        <input asp-for="CsvFile1" type="file" accept=".csv" class="form-control" />
+        <span asp-validation-for="CsvFile1" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CsvFile2"></label>
+        <input asp-for="CsvFile2" type="file" accept=".csv" class="form-control" />
+        <span asp-validation-for="CsvFile2" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CsvFile3"></label>
+        <input asp-for="CsvFile3" type="file" accept=".csv" class="form-control" />
+        <span asp-validation-for="CsvFile3" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-success mt-3">Upload CSV</button>

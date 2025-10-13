@@ -10,6 +10,12 @@ namespace PlcCreatorSystem_WEB.Models.VM
 
         [Required]
         [Display(Name = "CSV file")]
-        public IFormFile CsvFile { get; set; }
+        public IFormFile CsvFile1 { get; set; }
+        [Required]
+        [Display(Name = "CSV file")]
+        public IFormFile CsvFile2 { get; set; }
+        [Required]
+        [Display(Name = "CSV file")]
+        public IFormFile CsvFile3 { get; set; }
     }
 }
