@@ -10,6 +10,8 @@ using PlcCreatorSystem_API.Repository.IRepository;
 using PlcCreatorSystem_API.TIA;
 using System.Net;
 using System.Net.Mime;
+using IoFile = System.IO.File;
+
 
 namespace PlcCreatorSystem_API.Controllers
 {
@@ -184,7 +186,8 @@ namespace PlcCreatorSystem_API.Controllers
 
 
                 var csvFolder = Path.Combine(csvRoot, $"{project.Name}_CSVs");
-                var tiaFile = Path.Combine(tiaRoot, $"{project.Name}");
+                var tiaProject = Path.Combine(tiaRoot, $"{project.Name}");
+                var tiaArchive = Path.Combine(tiaRoot, $"{project.Name}.zap17");
 
                 try
                 {
@@ -193,10 +196,15 @@ namespace PlcCreatorSystem_API.Controllers
                     {
                         Directory.Delete(csvFolder, true);
                     }
-                    directoryExists = Directory.Exists(tiaFile);
+                    directoryExists = Directory.Exists(tiaProject);
                     if (directoryExists)
                     {
-                        Directory.Delete(tiaFile, true);
+                        Directory.Delete(tiaProject, true);
+                    }
+                    if (IoFile.Exists(tiaArchive))
+                    {
+                        IoFile.Delete(tiaArchive);
+                        
                     }
                 }
                 catch (Exception e)
