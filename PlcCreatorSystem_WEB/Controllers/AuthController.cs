@@ -52,11 +52,12 @@ namespace PlcCreatorSystem_WEB.Controllers
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginResponseDTO.User.Id.ToString()));//added
                 identity.AddClaim(new Claim(ClaimTypes.Name, loginResponseDTO.User.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.GivenName, loginResponseDTO.User.Name));
                 identity.AddClaim(new Claim(ClaimTypes.Role, loginResponseDTO.User.Role)); //could be array of roles or loop the roles if multiple role are
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-
+                
                 HttpContext.Session.SetString(SD.SessionToken, loginResponseDTO.Token);
                 return RedirectToAction("Index", "Home");
             }
@@ -71,13 +72,15 @@ namespace PlcCreatorSystem_WEB.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            var model = new RegisterationRequestDTO { Role = SD.Role.custom.ToString() };
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterationRequestDTO registerationRequestDTO)
         {
+            registerationRequestDTO.Role = SD.Role.custom.ToString();
             APIResponse result = await _authService.RegisterAsync<APIResponse>(registerationRequestDTO);
             return View();
         }

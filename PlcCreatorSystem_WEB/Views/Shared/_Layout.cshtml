@@ -4,6 +4,7 @@
 @{
     var user = httpAcc.HttpContext.User;
     var role = user?.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+    var name = user?.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
     var token = httpAcc.HttpContext?.Session.GetString(SD.SessionToken);
 }
 
@@ -56,7 +57,7 @@
                             </li>
                             <li class="nav-item disabled">
                                 <a class="nav-link" style="opacity:1; color: #0d6efd">
-                                    Hello @user?.Identity?.Name, yor access is: @role
+                                    Hello @name,  yor access is: @role
                                 </a>
                             </li>
                         }

@@ -18,6 +18,6 @@ namespace PlcCreatorSystem_WEB.Models.Dto
         public string Details { get; set; }
         [Required]
         public int UserID { get; set; }
-        public UserDTO User { get; set; }
+        public UserDTO LocalUser { get; set; }
     }
 }

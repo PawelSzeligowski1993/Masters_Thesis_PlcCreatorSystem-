@@ -1,30 +1,50 @@
-﻿@model PlcCreatorSystem_WEB.Models.Dto.RegisterationRequestDTO
+﻿@using PlcCreatorSystem_Utility;
+@model PlcCreatorSystem_WEB.Models.Dto.RegisterationRequestDTO
 
 <form method="post">
     <div class="container border p-4">
         <div class="row text-center">
             <h1>Register</h1>
         </div>
+
         <div class="row text-center">
             <div asp-validation-summary="All" class="text-danger"></div>
         </div>
+
         <div class="row">
             <div class="col-6 offset-3 pb-2">
-                <input asp-for="UserName" type="text" class="form-control" placeholder="Username..." />
+                <input asp-for="UserName" class="form-control" placeholder="Username..." />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
+
             <div class="col-6 offset-3 pb-2">
-                <input asp-for="Name" type="text" class="form-control" placeholder="Name..." />
+                <input asp-for="Name" class="form-control" placeholder="Name..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="col-6 offset-3 pb-2">
-                <input asp-for="Password" type="text" class="form-control" placeholder="Password..." />
+                <input asp-for="Password" type="password" class="form-control" placeholder="Password..." />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
+            
+            <div class="col-6 offset-3 pb-2 align-items-center">
+                <div class="flex-grow-1">
+                    <div class="form-control bg-warning text-dark fw-semibold text-center"
+                         style="pointer-events:none; cursor:default;">
+                        Role: @SD.Role.custom
+                    </div>
+                    <input asp-for="Role" type="hidden" value="@SD.Role.custom.ToString()" />
+                </div>
+            </div>
+
             <div class="col-6 offset-3 pb-2">
-                <button type="submit" class="form-control btn-success" value="Submit">Register</button>
+                <button type="submit" class="btn btn-success w-100">Register</button>
             </div>
         </div>
-    </div>   
+    </div>
 </form>
 
-@section Scripts{
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

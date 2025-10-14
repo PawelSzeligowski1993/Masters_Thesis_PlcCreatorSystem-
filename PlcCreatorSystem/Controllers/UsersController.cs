@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlcCreatorSystem_API.Models;
 using PlcCreatorSystem_API.Models.Dto;
 using PlcCreatorSystem_API.Repository.IRepository;
+using PlcCreatorSystem_Utility;
 using System.Net;
 
 namespace PlcCreatorSystem_API.Controllers
@@ -42,6 +43,9 @@ namespace PlcCreatorSystem_API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDTO model)
         {
+            //ModelState.Remove("Role");
+            //model.Role = "custom";
+
             bool ifUserNameUnique = _userRepository.IsUniqueUsers(model.UserName);
             if (!ifUserNameUnique)
             {

@@ -21,6 +21,6 @@ namespace PlcCreatorSystem_WEB.Models.Dto
         public ProjectStatus Status { get; set; }  // enum
         [Required]
         public int UserID { get; set; }
-        public UserDTO User { get; set; }
+        public UserDTO LocalUser { get; set; }
     }
 }

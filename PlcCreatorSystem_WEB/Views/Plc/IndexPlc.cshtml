@@ -61,8 +61,7 @@
                     <td>@item.IP_X2</td>
                     <td>@item.Identyfier</td>
                     <td>@item.Details</td>
-                    <td>@item.UserID</td>
-                    <td>@item.User?.UserName</td>
+                    <td>@item.LocalUser?.Name</td>
                     @if ((string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)) || (string.Equals(role, "engineer", StringComparison.OrdinalIgnoreCase)))
                     {
                         <td>

@@ -1,4 +1,6 @@
-﻿namespace PlcCreatorSystem_WEB.Models.Dto
+﻿using static PlcCreatorSystem_Utility.SD;
+
+namespace PlcCreatorSystem_WEB.Models.Dto
 {
     public class UserDTO
     {

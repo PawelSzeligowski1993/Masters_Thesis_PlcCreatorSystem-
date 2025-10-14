@@ -1,33 +1,39 @@
 ﻿@model PlcCreatorSystem_WEB.Models.VM.UploadCsvVM
 
 <form asp-action="UploadCsv" enctype="multipart/form-data" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="ProjectId"></label>
-        <input asp-for="ProjectId" class="form-control" />
-        <span asp-validation-for="ProjectId" class="text-danger"></span>
+    <input hidden asp-for=ProjectId />
+    <input type="hidden" asp-for="ProjectName" />
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="mb-3">
+            <label class="control-label pt-2" style="font-size:20px;">Project</label>
+            <div class="btn btn-warning form-control text-center" style="pointer-events:none; cursor:default;">
+                @Model.ProjectName
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CsvFile1"></label>
+            <input asp-for="CsvFile1" type="file" accept=".csv" class="form-control" />
+            <span asp-validation-for="CsvFile1" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CsvFile2"></label>
+            <input asp-for="CsvFile2" type="file" accept=".csv" class="form-control" />
+            <span asp-validation-for="CsvFile2" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CsvFile3"></label>
+            <input asp-for="CsvFile3" type="file" accept=".csv" class="form-control" />
+            <span asp-validation-for="CsvFile3" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Upload CSV</button>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="CsvFile1"></label>
-        <input asp-for="CsvFile1" type="file" accept=".csv" class="form-control" />
-        <span asp-validation-for="CsvFile1" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CsvFile2"></label>
-        <input asp-for="CsvFile2" type="file" accept=".csv" class="form-control" />
-        <span asp-validation-for="CsvFile2" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CsvFile3"></label>
-        <input asp-for="CsvFile3" type="file" accept=".csv" class="form-control" />
-        <span asp-validation-for="CsvFile3" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success mt-3">Upload CSV</button>
 </form>
 
 @section Scripts {

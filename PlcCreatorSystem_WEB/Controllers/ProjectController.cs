@@ -172,9 +172,24 @@ namespace PlcCreatorSystem_WEB.Controllers
         // GET: /UploadCsv/UploadCsv
         [Authorize(Roles = "admin,engineer")]
         [HttpGet]
-        public IActionResult UploadCsv()
+        public async Task<IActionResult> UploadCsv(int id)
         {
-            return View(new UploadCsvVM());  
+            var response = await _projectService.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.SessionToken));
+            string? name = null;
+
+            if (response != null && response.IsSuccess)
+            {
+                ProjectDTO? model = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
+                name = model?.Name;
+            }
+
+            var vm = new UploadCsvVM
+            {
+                ProjectId = id,
+                ProjectName = name
+            };
+
+            return View(vm);
         }
 
         // POST: /UploadCsv/UploadCsv

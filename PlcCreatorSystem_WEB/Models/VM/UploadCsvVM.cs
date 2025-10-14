@@ -5,8 +5,11 @@ namespace PlcCreatorSystem_WEB.Models.VM
     public class UploadCsvVM
     {
         [Required]
-        [Display(Name = "Project")]
         public int ProjectId { get; set; }
+
+        [Required]
+        [Display(Name = "Project")]
+        public string? ProjectName { get; set; }
 
         [Required]
         [Display(Name = "CSV file")]
